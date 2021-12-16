@@ -73,7 +73,6 @@
 		275CEEF719D5195B00901DD8 /* Peripheral.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEEF319D5195B00901DD8 /* Peripheral.cpp */; };
 		8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; settings = {ATTRIBUTES = (Required, ); }; };
-		94BE9E7A171695AE00AB08E6 /* OEIntellivisionSystemResponderClient.h in Resources */ = {isa = PBXBuildFile; fileRef = 94BE9E79171695AE00AB08E6 /* OEIntellivisionSystemResponderClient.h */; };
 		C66DFC1A0F51D82F0080AA28 /* BlissGameCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = C66DFC180F51D82F0080AA28 /* BlissGameCore.mm */; };
 		C6D120E91711302600E868A8 /* OpenEmuBase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6D120E71711302600E868A8 /* OpenEmuBase.framework */; };
 /* End PBXBuildFile section */
@@ -202,7 +201,6 @@
 		275CEEF519D5195B00901DD8 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
 		8D5B49B6048680CD000E48DA /* Bliss.oecoreplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Bliss.oecoreplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		94BE9E79171695AE00AB08E6 /* OEIntellivisionSystemResponderClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEIntellivisionSystemResponderClient.h; path = ../OpenEmu/SystemPlugins/Intellivision/OEIntellivisionSystemResponderClient.h; sourceTree = "<group>"; };
 		C66DFC180F51D82F0080AA28 /* BlissGameCore.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BlissGameCore.mm; sourceTree = "<group>"; };
 		C66DFC190F51D82F0080AA28 /* BlissGameCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlissGameCore.h; sourceTree = "<group>"; };
 		C6D120E71711302600E868A8 /* OpenEmuBase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenEmuBase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -261,7 +259,6 @@
 			children = (
 				C66DFC190F51D82F0080AA28 /* BlissGameCore.h */,
 				C66DFC180F51D82F0080AA28 /* BlissGameCore.mm */,
-				94BE9E79171695AE00AB08E6 /* OEIntellivisionSystemResponderClient.h */,
 			);
 			name = Classes;
 			sourceTree = SOURCE_ROOT;
@@ -539,7 +536,6 @@
 			files = (
 				8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */,
 				275CEEBA19D5190E00901DD8 /* knowncarts.cfg in Resources */,
-				94BE9E7A171695AE00AB08E6 /* OEIntellivisionSystemResponderClient.h in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

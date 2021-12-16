@@ -25,10 +25,7 @@
  */
 
 #import "BlissGameCore.h"
-#import <IOKit/hid/IOHIDLib.h>
-#import <OpenEmuBase/OERingBuffer.h>
-#import <OpenGL/gl.h>
-#import "OEIntellivisionSystemResponderClient.h"
+@import OpenGLES.ES2.GL
 
 #import "core/Emulator.h"
 #import "core/rip/Rip.h"
@@ -99,7 +96,7 @@ public:
 	void		render();
 };
 
-@interface BlissGameCore () <OEIntellivisionSystemResponderClient>
+@interface BlissGameCore () <PVIntellivisionSystemResponderClient>
 {
 	NSLock			*_bufferLock;
 	OERingBuffer	*_audioBuffer;
@@ -113,7 +110,7 @@ public:
 
 	NSMutableData	*_stateData;
 }
-- (int)blissButtonForIntellivisionButton:(OEIntellivisionButton)button player:(NSUInteger)player;
+- (int)blissButtonForIntellivisionButton:(PVIntellivisionButton)button player:(NSUInteger)player;
 @end
 
 @implementation BlissGameCore
@@ -456,19 +453,19 @@ static uint8_t _keyboardShiftCount = 0;
     [super stopEmulation];
 }
 
-- (OEIntSize)bufferSize
+- (CGSize)bufferSize
 {
-    return OEIntSizeMake(INTV_IMAGE_WIDTH, INTV_IMAGE_HEIGHT);
+    return CGSizeMake(INTV_IMAGE_WIDTH, INTV_IMAGE_HEIGHT);
 }
 
-- (OEIntRect)screenRect
+- (CGRect)screenRect
 {
-    return OEIntRectMake(0, 0, INTV_IMAGE_WIDTH, INTV_IMAGE_HEIGHT);
+    return CGRectMake(0, 0, INTV_IMAGE_WIDTH, INTV_IMAGE_HEIGHT);
 }
 
-- (OEIntSize)aspectSize
+- (CGSize)aspectSize
 {
-    return OEIntSizeMake(INTV_IMAGE_WIDTH * (12.0/7.0), INTV_IMAGE_HEIGHT);
+    return CGSizeMake(INTV_IMAGE_WIDTH * (12.0/7.0), INTV_IMAGE_HEIGHT);
 }
 
 - (const void *)getVideoBufferWithHint:(void *)hint
@@ -690,9 +687,9 @@ float BlissInputProducer::getValue(INT32 enumeration)
 	return value;
 }
 
-#pragma mark - OEIntellivisionSystemResponderClient
+#pragma mark - PVIntellivisionSystemResponderClient
 
-- (int)blissButtonForIntellivisionButton:(OEIntellivisionButton)button player:(NSUInteger)player;
+- (int)blissButtonForIntellivisionButton:(PVIntellivisionButton)button player:(NSUInteger)player;
 {
     int btn = -1;
 	static int OEBlissIntellivisionButton[] =
@@ -718,7 +715,7 @@ float BlissInputProducer::getValue(INT32 enumeration)
 		CONTROLLER_KEYPAD_ENTER
 	};
 
-	if(button < OEIntellivisionButtonCount && button >= OEIntellivisionButtonUp)
+	if(button < PVIntellivisionButtonCount && button >= PVIntellivisionButtonUp)
 	{
 		btn = OEBlissIntellivisionButton[button];
 	}
@@ -777,7 +774,7 @@ float BlissInputProducer::getValue(INT32 enumeration)
 	}
 }
 
-- (oneway void)didPushIntellivisionButton:(OEIntellivisionButton)button forPlayer:(NSUInteger)player;
+- (oneway void)didPushIntellivisionButton:(PVIntellivisionButton)button forPlayer:(NSUInteger)player;
 {
     int btn = [self blissButtonForIntellivisionButton:button player:player];
     
@@ -787,7 +784,7 @@ float BlissInputProducer::getValue(INT32 enumeration)
 	}
 }
 
-- (oneway void)didReleaseIntellivisionButton:(OEIntellivisionButton)button forPlayer:(NSUInteger)player;
+- (oneway void)didReleaseIntellivisionButton:(PVIntellivisionButton)button forPlayer:(NSUInteger)player;
 {
     int btn = [self blissButtonForIntellivisionButton:button player:player];
     

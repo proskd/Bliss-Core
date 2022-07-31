@@ -25,7 +25,13 @@
  */
 
 #import "BlissGameCore.h"
-@import OpenGLES.ES2.GL
+
+#import <OpenGLES/ES2/gl.h>
+#import <OpenGLES/ES2/glext.h>
+
+#import <PVSupport/PVSupport-Swift.h>
+#import <UIKit/UIKeyConstants.h>
+
 
 #import "core/Emulator.h"
 #import "core/rip/Rip.h"
@@ -256,7 +262,7 @@ static uint8_t _keyboardShiftCount = 0;
 			continue;
 		}
 
-		BIOSPath = [[self biosDirectoryPath] stringByAppendingString:[NSString stringWithFormat:@"/%s", r->getDefaultFileName()]];
+		BIOSPath = [[self BIOSPath] stringByAppendingString:[NSString stringWithFormat:@"/%s", r->getDefaultFileName()]];
 
 		if(r->load([BIOSPath fileSystemRepresentation], r->getDefaultFileOffset()))
 		{
@@ -485,7 +491,8 @@ static uint8_t _keyboardShiftCount = 0;
 
 - (GLenum)pixelType
 {
-    return GL_UNSIGNED_INT_8_8_8_8_REV;
+    return GL_UNSIGNED_INT;
+//    return GL_UNSIGNED_INT_8_8_8_8_REV;
 }
 
 - (NSTimeInterval)frameInterval
@@ -552,7 +559,7 @@ static uint8_t _keyboardShiftCount = 0;
         return _stateData;
 
     if(outError) {
-        *outError = [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotSaveStateError userInfo:@{
+        *outError = [NSError errorWithDomain:@"com.provenance.core" code:2 userInfo:@{
             NSLocalizedDescriptionKey : @"Save state data could not be written",
             NSLocalizedRecoverySuggestionErrorKey : @"The emulator could not write the state data."
         }];
@@ -573,7 +580,7 @@ static uint8_t _keyboardShiftCount = 0;
         return YES;
 
     if(outError) {
-        *outError = [NSError errorWithDomain:OEGameCoreErrorDomain code:OEGameCoreCouldNotLoadStateError userInfo:@{
+        *outError = [NSError errorWithDomain:@"com.provenance.core" code:1 userInfo:@{
             NSLocalizedDescriptionKey : @"The save state data could not be read"
         }];
     }
@@ -723,7 +730,7 @@ float BlissInputProducer::getValue(INT32 enumeration)
 	return btn;
 }
 
-- (void)setIntellivisionButton:(int)btn isDown:(BOOL)down forPlayer:(NSUInteger)player
+- (oneway void)setIntellivisionButton:(int)btn isDown:(BOOL)down forPlayer:(NSUInteger)player
 {
 	switch(btn)
 	{
@@ -774,7 +781,7 @@ float BlissInputProducer::getValue(INT32 enumeration)
 	}
 }
 
-- (oneway void)didPushIntellivisionButton:(PVIntellivisionButton)button forPlayer:(NSUInteger)player;
+- (void)didPushIntellivisionButton:(PVIntellivisionButton)button forPlayer:(NSInteger)player;
 {
     int btn = [self blissButtonForIntellivisionButton:button player:player];
     
@@ -784,7 +791,7 @@ float BlissInputProducer::getValue(INT32 enumeration)
 	}
 }
 
-- (oneway void)didReleaseIntellivisionButton:(PVIntellivisionButton)button forPlayer:(NSUInteger)player;
+- (void)didReleaseIntellivisionButton:(PVIntellivisionButton)button forPlayer:(NSInteger)player;
 {
     int btn = [self blissButtonForIntellivisionButton:button player:player];
     
@@ -801,68 +808,68 @@ float BlissInputProducer::getValue(INT32 enumeration)
 	switch(keyCode)
 	{
 		default: break;
-		case kHIDUsage_KeyboardA: btn = ECS_KEYBOARD_A; break;
-		case kHIDUsage_KeyboardB: btn = ECS_KEYBOARD_B; break;
-		case kHIDUsage_KeyboardC: btn = ECS_KEYBOARD_C; break;
-		case kHIDUsage_KeyboardD: btn = ECS_KEYBOARD_D; break;
-		case kHIDUsage_KeyboardE: btn = ECS_KEYBOARD_E; break;
-		case kHIDUsage_KeyboardF: btn = ECS_KEYBOARD_F; break;
-		case kHIDUsage_KeyboardG: btn = ECS_KEYBOARD_G; break;
-		case kHIDUsage_KeyboardH: btn = ECS_KEYBOARD_H; break;
-		case kHIDUsage_KeyboardI: btn = ECS_KEYBOARD_I; break;
-		case kHIDUsage_KeyboardJ: btn = ECS_KEYBOARD_J; break;
-		case kHIDUsage_KeyboardK: btn = ECS_KEYBOARD_K; break;
-		case kHIDUsage_KeyboardL: btn = ECS_KEYBOARD_L; break;
-		case kHIDUsage_KeyboardM: btn = ECS_KEYBOARD_M; break;
-		case kHIDUsage_KeyboardN: btn = ECS_KEYBOARD_N; break;
-		case kHIDUsage_KeyboardO: btn = ECS_KEYBOARD_O; break;
-		case kHIDUsage_KeyboardP: btn = ECS_KEYBOARD_P; break;
-		case kHIDUsage_KeyboardQ: btn = ECS_KEYBOARD_Q; break;
-		case kHIDUsage_KeyboardR: btn = ECS_KEYBOARD_R; break;
-		case kHIDUsage_KeyboardS: btn = ECS_KEYBOARD_S; break;
-		case kHIDUsage_KeyboardT: btn = ECS_KEYBOARD_T; break;
-		case kHIDUsage_KeyboardU: btn = ECS_KEYBOARD_U; break;
-		case kHIDUsage_KeyboardV: btn = ECS_KEYBOARD_V; break;
-		case kHIDUsage_KeyboardW: btn = ECS_KEYBOARD_W; break;
-		case kHIDUsage_KeyboardX: btn = ECS_KEYBOARD_X; break;
-		case kHIDUsage_KeyboardY: btn = ECS_KEYBOARD_Y; break;
-		case kHIDUsage_KeyboardZ: btn = ECS_KEYBOARD_Z; break;
+		case UIKeyboardHIDUsageKeyboardA: btn = ECS_KEYBOARD_A; break;
+		case UIKeyboardHIDUsageKeyboardB: btn = ECS_KEYBOARD_B; break;
+		case UIKeyboardHIDUsageKeyboardC: btn = ECS_KEYBOARD_C; break;
+		case UIKeyboardHIDUsageKeyboardD: btn = ECS_KEYBOARD_D; break;
+		case UIKeyboardHIDUsageKeyboardE: btn = ECS_KEYBOARD_E; break;
+		case UIKeyboardHIDUsageKeyboardF: btn = ECS_KEYBOARD_F; break;
+		case UIKeyboardHIDUsageKeyboardG: btn = ECS_KEYBOARD_G; break;
+		case UIKeyboardHIDUsageKeyboardH: btn = ECS_KEYBOARD_H; break;
+		case UIKeyboardHIDUsageKeyboardI: btn = ECS_KEYBOARD_I; break;
+		case UIKeyboardHIDUsageKeyboardJ: btn = ECS_KEYBOARD_J; break;
+		case UIKeyboardHIDUsageKeyboardK: btn = ECS_KEYBOARD_K; break;
+		case UIKeyboardHIDUsageKeyboardL: btn = ECS_KEYBOARD_L; break;
+		case UIKeyboardHIDUsageKeyboardM: btn = ECS_KEYBOARD_M; break;
+		case UIKeyboardHIDUsageKeyboardN: btn = ECS_KEYBOARD_N; break;
+		case UIKeyboardHIDUsageKeyboardO: btn = ECS_KEYBOARD_O; break;
+		case UIKeyboardHIDUsageKeyboardP: btn = ECS_KEYBOARD_P; break;
+		case UIKeyboardHIDUsageKeyboardQ: btn = ECS_KEYBOARD_Q; break;
+		case UIKeyboardHIDUsageKeyboardR: btn = ECS_KEYBOARD_R; break;
+		case UIKeyboardHIDUsageKeyboardS: btn = ECS_KEYBOARD_S; break;
+		case UIKeyboardHIDUsageKeyboardT: btn = ECS_KEYBOARD_T; break;
+		case UIKeyboardHIDUsageKeyboardU: btn = ECS_KEYBOARD_U; break;
+		case UIKeyboardHIDUsageKeyboardV: btn = ECS_KEYBOARD_V; break;
+		case UIKeyboardHIDUsageKeyboardW: btn = ECS_KEYBOARD_W; break;
+		case UIKeyboardHIDUsageKeyboardX: btn = ECS_KEYBOARD_X; break;
+		case UIKeyboardHIDUsageKeyboardY: btn = ECS_KEYBOARD_Y; break;
+		case UIKeyboardHIDUsageKeyboardZ: btn = ECS_KEYBOARD_Z; break;
 
-		case kHIDUsage_Keyboard1: btn = ECS_KEYBOARD_1; break;
-		case kHIDUsage_Keyboard2: btn = ECS_KEYBOARD_2; break;
-		case kHIDUsage_Keyboard3: btn = ECS_KEYBOARD_3; break;
-		case kHIDUsage_Keyboard4: btn = ECS_KEYBOARD_4; break;
-		case kHIDUsage_Keyboard5: btn = ECS_KEYBOARD_5; break;
-		case kHIDUsage_Keyboard6: btn = ECS_KEYBOARD_6; break;
-		case kHIDUsage_Keyboard7: btn = ECS_KEYBOARD_7; break;
-		case kHIDUsage_Keyboard8: btn = ECS_KEYBOARD_8; break;
-		case kHIDUsage_Keyboard9: btn = ECS_KEYBOARD_9; break;
-		case kHIDUsage_Keyboard0: btn = ECS_KEYBOARD_0; break;
+		case UIKeyboardHIDUsageKeyboard1: btn = ECS_KEYBOARD_1; break;
+		case UIKeyboardHIDUsageKeyboard2: btn = ECS_KEYBOARD_2; break;
+		case UIKeyboardHIDUsageKeyboard3: btn = ECS_KEYBOARD_3; break;
+		case UIKeyboardHIDUsageKeyboard4: btn = ECS_KEYBOARD_4; break;
+		case UIKeyboardHIDUsageKeyboard5: btn = ECS_KEYBOARD_5; break;
+		case UIKeyboardHIDUsageKeyboard6: btn = ECS_KEYBOARD_6; break;
+		case UIKeyboardHIDUsageKeyboard7: btn = ECS_KEYBOARD_7; break;
+		case UIKeyboardHIDUsageKeyboard8: btn = ECS_KEYBOARD_8; break;
+		case UIKeyboardHIDUsageKeyboard9: btn = ECS_KEYBOARD_9; break;
+		case UIKeyboardHIDUsageKeyboard0: btn = ECS_KEYBOARD_0; break;
 
-		case kHIDUsage_KeyboardReturnOrEnter: btn = ECS_KEYBOARD_RETURN; break;
-		case kHIDUsage_KeyboardEscape: btn = ECS_KEYBOARD_ESCAPE; break;
-		case kHIDUsage_KeyboardDeleteOrBackspace: btn = ECS_KEYBOARD_LEFT; break;
-		case kHIDUsage_KeyboardSpacebar: btn = ECS_KEYBOARD_SPACE; break;
+		case UIKeyboardHIDUsageKeyboardReturnOrEnter: btn = ECS_KEYBOARD_RETURN; break;
+		case UIKeyboardHIDUsageKeyboardEscape: btn = ECS_KEYBOARD_ESCAPE; break;
+		case UIKeyboardHIDUsageKeyboardDeleteOrBackspace: btn = ECS_KEYBOARD_LEFT; break;
+		case UIKeyboardHIDUsageKeyboardSpacebar: btn = ECS_KEYBOARD_SPACE; break;
 
-		case kHIDUsage_KeyboardHyphen: btn = ECS_KEYBOARD_6; break; // shifted
-		case kHIDUsage_KeyboardEqualSign: btn = ECS_KEYBOARD_1; break; // shifted
-		case kHIDUsage_KeyboardSemicolon: btn = ECS_KEYBOARD_SEMICOLON; break;
-		case kHIDUsage_KeyboardQuote: btn = ECS_KEYBOARD_RIGHT; break; // shifted
-		case kHIDUsage_KeyboardComma: btn = ECS_KEYBOARD_COMMA; break;
-		case kHIDUsage_KeyboardPeriod: btn = ECS_KEYBOARD_PERIOD; break;
-		case kHIDUsage_KeyboardSlash: btn = ECS_KEYBOARD_7; break; // shifted
+		case UIKeyboardHIDUsageKeyboardHyphen: btn = ECS_KEYBOARD_6; break; // shifted
+		case UIKeyboardHIDUsageKeyboardEqualSign: btn = ECS_KEYBOARD_1; break; // shifted
+		case UIKeyboardHIDUsageKeyboardSemicolon: btn = ECS_KEYBOARD_SEMICOLON; break;
+		case UIKeyboardHIDUsageKeyboardQuote: btn = ECS_KEYBOARD_RIGHT; break; // shifted
+		case UIKeyboardHIDUsageKeyboardComma: btn = ECS_KEYBOARD_COMMA; break;
+		case UIKeyboardHIDUsageKeyboardPeriod: btn = ECS_KEYBOARD_PERIOD; break;
+		case UIKeyboardHIDUsageKeyboardSlash: btn = ECS_KEYBOARD_7; break; // shifted
 
-		case kHIDUsage_KeyboardRightArrow: btn = ECS_KEYBOARD_RIGHT; break;
-		case kHIDUsage_KeyboardLeftArrow: btn = ECS_KEYBOARD_LEFT; break;
-		case kHIDUsage_KeyboardDownArrow: btn = ECS_KEYBOARD_DOWN; break;
-		case kHIDUsage_KeyboardUpArrow: btn = ECS_KEYBOARD_UP; break;
+		case UIKeyboardHIDUsageKeyboardRightArrow: btn = ECS_KEYBOARD_RIGHT; break;
+		case UIKeyboardHIDUsageKeyboardLeftArrow: btn = ECS_KEYBOARD_LEFT; break;
+		case UIKeyboardHIDUsageKeyboardDownArrow: btn = ECS_KEYBOARD_DOWN; break;
+		case UIKeyboardHIDUsageKeyboardUpArrow: btn = ECS_KEYBOARD_UP; break;
 
-		case kHIDUsage_KeyboardReturn: btn = ECS_KEYBOARD_RETURN; break;
+		case UIKeyboardHIDUsageKeyboardReturn: btn = ECS_KEYBOARD_RETURN; break;
 
-		case kHIDUsage_KeyboardLeftControl:
-		case kHIDUsage_KeyboardRightControl: btn = ECS_KEYBOARD_CONTROL; break;
-		case kHIDUsage_KeyboardLeftShift:
-		case kHIDUsage_KeyboardRightShift: btn = ECS_KEYBOARD_SHIFT; break;
+		case UIKeyboardHIDUsageKeyboardLeftControl:
+		case UIKeyboardHIDUsageKeyboardRightControl: btn = ECS_KEYBOARD_CONTROL; break;
+		case UIKeyboardHIDUsageKeyboardLeftShift:
+		case UIKeyboardHIDUsageKeyboardRightShift: btn = ECS_KEYBOARD_SHIFT; break;
 	}
 
 	return btn;
@@ -873,13 +880,13 @@ float BlissInputProducer::getValue(INT32 enumeration)
 	switch(keyCode)
 	{
 		default: break;
-		case kHIDUsage_KeyboardLeftShift:
-		case kHIDUsage_KeyboardRightShift: return YES; break;
+		case UIKeyboardHIDUsageKeyboardLeftShift:
+		case UIKeyboardHIDUsageKeyboardRightShift: return YES; break;
 
-		case kHIDUsage_KeyboardHyphen: return YES; break;
-		case kHIDUsage_KeyboardEqualSign: return YES; break;
-		case kHIDUsage_KeyboardQuote: return YES; break;
-		case kHIDUsage_KeyboardSlash: return YES; break;
+		case UIKeyboardHIDUsageKeyboardHyphen: return YES; break;
+		case UIKeyboardHIDUsageKeyboardEqualSign: return YES; break;
+		case UIKeyboardHIDUsageKeyboardQuote: return YES; break;
+		case UIKeyboardHIDUsageKeyboardSlash: return YES; break;
 	}
 	return NO;
 }

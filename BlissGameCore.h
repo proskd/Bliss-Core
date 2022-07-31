@@ -24,11 +24,12 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@import Foundation;
-@import PVSupport;
+#import <Foundation/Foundation.h>
+#import <PVSupport/PVSupport.h>
+#import <PVSupport/PVSupport-Swift.h>
 
 __attribute__((visibility("default")))
-@interface BlissGameCore : PVEmulatorCore
+@interface BlissGameCore : PVEmulatorCore<PVIntellivisionSystemResponderClient>
 {
 }
 

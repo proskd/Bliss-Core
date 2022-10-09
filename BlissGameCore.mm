@@ -609,7 +609,7 @@ void BlissAudioMixer::init(UINT32 sampleRate)
 	if(_currentCore->_audioBuffer)
 	{
 #warning May not need this
-		[_currentCore->_audioBuffer setBufferLength:(sizeof(INT16) * sampleInterval * 8)];
+		[_currentCore->_audioBuffer setLength:(sizeof(INT16) * sampleInterval * 8)];
 	}
 }
 

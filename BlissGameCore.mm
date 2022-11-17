@@ -26,12 +26,21 @@
 
 #import "BlissGameCore.h"
 
-#import <OpenGLES/ES2/gl.h>
-#import <OpenGLES/ES2/glext.h>
+#if __has_include(<OpenGL/OpenGL.h>)
+#import <OpenGL/gl3.h>
+#import <OpenGL/gl3ext.h>
+#import <OpenGL/OpenGL.h>
+#import <GLUT/GLUT.h>
+#else
+#import <OpenGLES/ES3/gl.h>
+#import <OpenGLES/ES3/glext.h>
+#endif
+
+#if __has_include(<UIKit/UIKeyConstants.h>)
+#import <UIKit/UIKeyConstants.h>
+#endif
 
 #import <PVSupport/PVSupport-Swift.h>
-#import <UIKit/UIKeyConstants.h>
-
 
 #import "core/Emulator.h"
 #import "core/rip/Rip.h"
@@ -805,8 +814,8 @@ float BlissInputProducer::getValue(INT32 enumeration)
 - (int)intellivisionKeyForKeyCode:(unsigned short)keyCode
 {
 	int btn = -1;
-
-	switch(keyCode)
+#if !TARGET_OS_OSX
+    switch(keyCode)
 	{
 		default: break;
 		case UIKeyboardHIDUsageKeyboardA: btn = ECS_KEYBOARD_A; break;
@@ -872,12 +881,14 @@ float BlissInputProducer::getValue(INT32 enumeration)
 		case UIKeyboardHIDUsageKeyboardLeftShift:
 		case UIKeyboardHIDUsageKeyboardRightShift: btn = ECS_KEYBOARD_SHIFT; break;
 	}
+#endif
 
 	return btn;
 }
 
 - (BOOL)isIntellivisionKeyShiftedForKeycode:(unsigned short)keyCode
 {
+#if !TARGET_OS_OSX
 	switch(keyCode)
 	{
 		default: break;
@@ -889,6 +900,7 @@ float BlissInputProducer::getValue(INT32 enumeration)
 		case UIKeyboardHIDUsageKeyboardQuote: return YES; break;
 		case UIKeyboardHIDUsageKeyboardSlash: return YES; break;
 	}
+#endif
 	return NO;
 }
 

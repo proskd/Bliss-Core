@@ -56,63 +56,9 @@
 		B36703B12896358500F75595 /* Antic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEECF19D5194C00901DD8 /* Antic.cpp */; };
 		B36703B22896358500F75595 /* Processor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE8619D518E500901DD8 /* Processor.cpp */; };
 		B36703B32896358500F75595 /* AudioMixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE6419D518D200901DD8 /* AudioMixer.cpp */; };
-		B36703B6289635C500F75595 /* PVBliss.h in Headers */ = {isa = PBXBuildFile; fileRef = B367037F2896357400F75595 /* PVBliss.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B36703B8289635C500F75595 /* MemoryBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEEA119D518FF00901DD8 /* MemoryBus.cpp */; };
-		B36703B9289635C500F75595 /* SP0256_Registers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE7519D518D200901DD8 /* SP0256_Registers.cpp */; };
-		B36703BA289635C500F75595 /* MOB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEEDF19D5194C00901DD8 /* MOB.cpp */; };
-		B36703BB289635C500F75595 /* JoyPad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE5A19D5189B00901DD8 /* JoyPad.cpp */; };
-		B36703BC289635C500F75595 /* AY38914.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE6E19D518D200901DD8 /* AY38914.cpp */; };
-		B36703BD289635C500F75595 /* Processor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE8619D518E500901DD8 /* Processor.cpp */; };
-		B36703BE289635C500F75595 /* BackTabRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEED519D5194C00901DD8 /* BackTabRAM.cpp */; };
-		B36703BF289635C500F75595 /* VideoBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEEE319D5194C00901DD8 /* VideoBus.cpp */; };
-		B36703C0289635C500F75595 /* ProcessorBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE8819D518E500901DD8 /* ProcessorBus.cpp */; };
-		B36703C1289635C500F75595 /* ripxbf.c in Sources */ = {isa = PBXBuildFile; fileRef = 275CEEC419D5193F00901DD8 /* ripxbf.c */; };
-		B36703C2289635C500F75595 /* BlissGameCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = C66DFC180F51D82F0080AA28 /* BlissGameCore.mm */; };
-		B36703C3289635C500F75595 /* JoystickInputProducer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE9719D518F600901DD8 /* JoystickInputProducer.cpp */; };
-		B36703C4289635C500F75595 /* ROMBanker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEEA719D518FF00901DD8 /* ROMBanker.cpp */; };
-		B36703C5289635C500F75595 /* Antic_Registers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEECD19D5194C00901DD8 /* Antic_Registers.cpp */; };
-		B36703C6289635C500F75595 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 275CEEC619D5193F00901DD8 /* unzip.c */; };
-		B36703C7289635C500F75595 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 275CEEC019D5193F00901DD8 /* ioapi.c */; };
-		B36703C8289635C500F75595 /* ROM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEEA519D518FF00901DD8 /* ROM.cpp */; };
-		B36703C9289635C500F75595 /* Pokey_Registers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE7119D518D200901DD8 /* Pokey_Registers.cpp */; };
-		B36703CA289635C500F75595 /* AY38914_Registers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE6C19D518D200901DD8 /* AY38914_Registers.cpp */; };
-		B36703CB289635C500F75595 /* AudioOutputLine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE6619D518D200901DD8 /* AudioOutputLine.cpp */; };
-		B36703CC289635C500F75595 /* Atari5200.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE5819D5189B00901DD8 /* Atari5200.cpp */; };
-		B36703CD289635C500F75595 /* Intellivoice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE5119D5189200901DD8 /* Intellivoice.cpp */; };
-		B36703CE289635C500F75595 /* ECS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE4919D5189200901DD8 /* ECS.cpp */; };
-		B36703CF289635C500F75595 /* Intellivision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE4F19D5189200901DD8 /* Intellivision.cpp */; };
-		B36703D0289635C500F75595 /* RAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEEA319D518FF00901DD8 /* RAM.cpp */; };
-		B36703D1289635C500F75595 /* KeyboardInputProducer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE9919D518F600901DD8 /* KeyboardInputProducer.cpp */; };
-		B36703D2289635C500F75595 /* InputProducerManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE9519D518F600901DD8 /* InputProducerManager.cpp */; };
-		B36703D3289635C500F75595 /* Emulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEEF119D5195B00901DD8 /* Emulator.cpp */; };
-		B36703D4289635C500F75595 /* Peripheral.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEEF319D5195B00901DD8 /* Peripheral.cpp */; };
-		B36703D5289635C500F75595 /* ECSKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE4B19D5189200901DD8 /* ECSKeyboard.cpp */; };
-		B36703D6289635C500F75595 /* AY38900.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEED319D5194C00901DD8 /* AY38900.cpp */; };
-		B36703D7289635C500F75595 /* 6502c.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE8219D518E500901DD8 /* 6502c.cpp */; };
-		B36703D8289635C500F75595 /* GTIA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEEDD19D5194C00901DD8 /* GTIA.cpp */; };
-		B36703D9289635C500F75595 /* Rip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEEC219D5193F00901DD8 /* Rip.cpp */; };
-		B36703DA289635C500F75595 /* CP1610.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE8419D518E500901DD8 /* CP1610.cpp */; };
-		B36703DB289635C500F75595 /* InputConsumerObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE9219D518F600901DD8 /* InputConsumerObject.cpp */; };
-		B36703DC289635C500F75595 /* Antic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEECF19D5194C00901DD8 /* Antic.cpp */; };
-		B36703DD289635C500F75595 /* Pokey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE7319D518D200901DD8 /* Pokey.cpp */; };
-		B36703DE289635C500F75595 /* AudioMixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE6419D518D200901DD8 /* AudioMixer.cpp */; };
-		B36703DF289635C500F75595 /* InputConsumerBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE9019D518F600901DD8 /* InputConsumerBus.cpp */; };
-		B36703E0289635C500F75595 /* GRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEED719D5194C00901DD8 /* GRAM.cpp */; };
-		B36703E1289635C500F75595 /* HandController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE4D19D5189200901DD8 /* HandController.cpp */; };
-		B36703E2289635C500F75595 /* SP0256.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE7719D518D200901DD8 /* SP0256.cpp */; };
-		B36703E3289635C500F75595 /* AY38900_Registers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEED119D5194C00901DD8 /* AY38900_Registers.cpp */; };
-		B36703E4289635C500F75595 /* CRC32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEEBE19D5193F00901DD8 /* CRC32.cpp */; };
-		B36703E5289635C500F75595 /* GROM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEED919D5194C00901DD8 /* GROM.cpp */; };
-		B36703E6289635C500F75595 /* AY38914_Channel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE6919D518D200901DD8 /* AY38914_Channel.cpp */; };
-		B36703E7289635C500F75595 /* GTIA_Registers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEEDB19D5194C00901DD8 /* GTIA_Registers.cpp */; };
-		B3D17FFA28963A54001207AF /* PVSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3D17FF928963A54001207AF /* PVSupport.framework */; };
 		B3D17FFD28963A5C001207AF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 089C1672FE841209C02AAC07 /* Foundation.framework */; };
-		B3D17FFF28963A63001207AF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3D17FFE28963A63001207AF /* UIKit.framework */; };
-		B3D1800128963A6C001207AF /* PVSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3D1800028963A6C001207AF /* PVSupport.framework */; };
-		B3D1800528963A74001207AF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3D1800428963A74001207AF /* UIKit.framework */; };
-		B3D1800728963A79001207AF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3D1800628963A79001207AF /* Foundation.framework */; };
 		B3D1800B28963BD9001207AF /* BlissGameCore.h in Headers */ = {isa = PBXBuildFile; fileRef = C66DFC190F51D82F0080AA28 /* BlissGameCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B3D1800C28963BD9001207AF /* BlissGameCore.h in Headers */ = {isa = PBXBuildFile; fileRef = C66DFC190F51D82F0080AA28 /* BlissGameCore.h */; };
+		B3EA6CD62926239F00010224 /* PVSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3D17FF928963A54001207AF /* PVSupport.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -230,7 +176,6 @@
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B367037D2896357300F75595 /* PVBliss.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PVBliss.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B367037F2896357400F75595 /* PVBliss.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PVBliss.h; sourceTree = "<group>"; };
-		B36703ED289635C500F75595 /* PVBliss-tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "PVBliss-tvOS.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3D17FF928963A54001207AF /* PVSupport.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PVSupport.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3D17FFE28963A63001207AF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/iOSSupport/System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		B3D1800028963A6C001207AF /* PVSupport.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PVSupport.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -247,19 +192,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B3D17FFA28963A54001207AF /* PVSupport.framework in Frameworks */,
-				B3D17FFF28963A63001207AF /* UIKit.framework in Frameworks */,
+				B3EA6CD62926239F00010224 /* PVSupport.framework in Frameworks */,
 				B3D17FFD28963A5C001207AF /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B36703E8289635C500F75595 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B3D1800128963A6C001207AF /* PVSupport.framework in Frameworks */,
-				B3D1800728963A79001207AF /* Foundation.framework in Frameworks */,
-				B3D1800528963A74001207AF /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -333,7 +267,6 @@
 			isa = PBXGroup;
 			children = (
 				B367037D2896357300F75595 /* PVBliss.framework */,
-				B36703ED289635C500F75595 /* PVBliss-tvOS.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -563,15 +496,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B36703B5289635C500F75595 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B36703B6289635C500F75595 /* PVBliss.h in Headers */,
-				B3D1800C28963BD9001207AF /* BlissGameCore.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -591,24 +515,6 @@
 			name = PVBliss;
 			productName = PVBliss;
 			productReference = B367037D2896357300F75595 /* PVBliss.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		B36703B4289635C500F75595 /* PVBliss-tvOS */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = B36703EA289635C500F75595 /* Build configuration list for PBXNativeTarget "PVBliss-tvOS" */;
-			buildPhases = (
-				B36703B5289635C500F75595 /* Headers */,
-				B36703B7289635C500F75595 /* Sources */,
-				B36703E8289635C500F75595 /* Frameworks */,
-				B36703E9289635C500F75595 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "PVBliss-tvOS";
-			productName = PVBliss;
-			productReference = B36703ED289635C500F75595 /* PVBliss-tvOS.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -637,20 +543,12 @@
 			projectRoot = "";
 			targets = (
 				B367037C2896357300F75595 /* PVBliss */,
-				B36703B4289635C500F75595 /* PVBliss-tvOS */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		B367037B2896357300F75595 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B36703E9289635C500F75595 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -715,61 +613,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B36703B7289635C500F75595 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B36703B8289635C500F75595 /* MemoryBus.cpp in Sources */,
-				B36703B9289635C500F75595 /* SP0256_Registers.cpp in Sources */,
-				B36703BA289635C500F75595 /* MOB.cpp in Sources */,
-				B36703BB289635C500F75595 /* JoyPad.cpp in Sources */,
-				B36703BC289635C500F75595 /* AY38914.cpp in Sources */,
-				B36703BD289635C500F75595 /* Processor.cpp in Sources */,
-				B36703BE289635C500F75595 /* BackTabRAM.cpp in Sources */,
-				B36703BF289635C500F75595 /* VideoBus.cpp in Sources */,
-				B36703C0289635C500F75595 /* ProcessorBus.cpp in Sources */,
-				B36703C1289635C500F75595 /* ripxbf.c in Sources */,
-				B36703C2289635C500F75595 /* BlissGameCore.mm in Sources */,
-				B36703C3289635C500F75595 /* JoystickInputProducer.cpp in Sources */,
-				B36703C4289635C500F75595 /* ROMBanker.cpp in Sources */,
-				B36703C5289635C500F75595 /* Antic_Registers.cpp in Sources */,
-				B36703C6289635C500F75595 /* unzip.c in Sources */,
-				B36703C7289635C500F75595 /* ioapi.c in Sources */,
-				B36703C8289635C500F75595 /* ROM.cpp in Sources */,
-				B36703C9289635C500F75595 /* Pokey_Registers.cpp in Sources */,
-				B36703CA289635C500F75595 /* AY38914_Registers.cpp in Sources */,
-				B36703CB289635C500F75595 /* AudioOutputLine.cpp in Sources */,
-				B36703CC289635C500F75595 /* Atari5200.cpp in Sources */,
-				B36703CD289635C500F75595 /* Intellivoice.cpp in Sources */,
-				B36703CE289635C500F75595 /* ECS.cpp in Sources */,
-				B36703CF289635C500F75595 /* Intellivision.cpp in Sources */,
-				B36703D0289635C500F75595 /* RAM.cpp in Sources */,
-				B36703D1289635C500F75595 /* KeyboardInputProducer.cpp in Sources */,
-				B36703D2289635C500F75595 /* InputProducerManager.cpp in Sources */,
-				B36703D3289635C500F75595 /* Emulator.cpp in Sources */,
-				B36703D4289635C500F75595 /* Peripheral.cpp in Sources */,
-				B36703D5289635C500F75595 /* ECSKeyboard.cpp in Sources */,
-				B36703D6289635C500F75595 /* AY38900.cpp in Sources */,
-				B36703D7289635C500F75595 /* 6502c.cpp in Sources */,
-				B36703D8289635C500F75595 /* GTIA.cpp in Sources */,
-				B36703D9289635C500F75595 /* Rip.cpp in Sources */,
-				B36703DA289635C500F75595 /* CP1610.cpp in Sources */,
-				B36703DB289635C500F75595 /* InputConsumerObject.cpp in Sources */,
-				B36703DC289635C500F75595 /* Antic.cpp in Sources */,
-				B36703DD289635C500F75595 /* Pokey.cpp in Sources */,
-				B36703DE289635C500F75595 /* AudioMixer.cpp in Sources */,
-				B36703DF289635C500F75595 /* InputConsumerBus.cpp in Sources */,
-				B36703E0289635C500F75595 /* GRAM.cpp in Sources */,
-				B36703E1289635C500F75595 /* HandController.cpp in Sources */,
-				B36703E2289635C500F75595 /* SP0256.cpp in Sources */,
-				B36703E3289635C500F75595 /* AY38900_Registers.cpp in Sources */,
-				B36703E4289635C500F75595 /* CRC32.cpp in Sources */,
-				B36703E5289635C500F75595 /* GROM.cpp in Sources */,
-				B36703E6289635C500F75595 /* AY38914_Channel.cpp in Sources */,
-				B36703E7289635C500F75595 /* GTIA_Registers.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
@@ -787,6 +630,7 @@
 		1DEB913F08733D840010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
@@ -820,7 +664,9 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "";
-				SDKROOT = macosx;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
 				TVOS_DEPLOYMENT_TARGET = 13.0;
 			};
 			name = Debug;
@@ -828,6 +674,7 @@
 		1DEB914008733D840010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
@@ -859,7 +706,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				OTHER_CFLAGS = "";
-				SDKROOT = macosx;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
 				TVOS_DEPLOYMENT_TARGET = 13.0;
 			};
 			name = Release;
@@ -867,6 +716,7 @@
 		B36703812896357400F75595 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -895,10 +745,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
 				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SDKROOT)/System/iOSSupport/System/Library/Frameworks",
-				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -923,8 +769,11 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,3,4,6";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -933,6 +782,7 @@
 		B36703822896357400F75595 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -961,10 +811,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SDKROOT)/System/iOSSupport/System/Library/Frameworks",
-				);
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
@@ -984,128 +830,11 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		B36703EB289635C500F75595 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
-				ENABLE_TESTABILITY = YES;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.provenance-emu.PVBliss";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SDKROOT = appletvos;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = 3;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		B36703EC289635C500F75595 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_STYLE = Manual;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.provenance-emu.PVBliss";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SDKROOT = appletvos;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = 3;
+				TARGETED_DEVICE_FAMILY = "1,2,3,4,6";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1129,15 +858,6 @@
 			buildConfigurations = (
 				B36703812896357400F75595 /* Debug */,
 				B36703822896357400F75595 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		B36703EA289635C500F75595 /* Build configuration list for PBXNativeTarget "PVBliss-tvOS" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				B36703EB289635C500F75595 /* Debug */,
-				B36703EC289635C500F75595 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

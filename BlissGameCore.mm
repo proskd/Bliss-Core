@@ -493,7 +493,16 @@ static uint8_t _keyboardShiftCount = 0;
     return _videoBuffer = (uint8_t*)hint;
 }
 
+- (const void *)videoBuffer {
+    return [self getVideoBufferWithHint:nil];
+}
+
 - (GLenum)pixelFormat
+{
+    return GL_BGRA;
+}
+
+- (GLenum)internalPixelFormat
 {
     return GL_BGRA;
 }

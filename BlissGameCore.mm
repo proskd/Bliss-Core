@@ -111,7 +111,7 @@ public:
 	void		render();
 };
 
-@interface BlissGameCore () <PVIntellivisionSystemResponderClient>
+@interface PVBlissGameCore () <PVIntellivisionSystemResponderClient>
 {
 	NSLock			*_bufferLock;
 	OERingBuffer	*_audioBuffer;
@@ -128,10 +128,10 @@ public:
 - (int)blissButtonForIntellivisionButton:(PVIntellivisionButton)button player:(NSUInteger)player;
 @end
 
-@implementation BlissGameCore
+@implementation PVBlissGameCore
 
 // Global variables because the callbacks need to access them...
-static BlissGameCore *_currentCore;
+static PVBlissGameCore *_currentCore;
 static BlissController _controller[2] = {0};
 static uint64_t _keyboard = 0;
 static uint8_t _keyboardDownCount = 0;

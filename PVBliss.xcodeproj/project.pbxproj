@@ -60,6 +60,7 @@
 		B3D17FFD28963A5C001207AF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 089C1672FE841209C02AAC07 /* Foundation.framework */; };
 		B3D1800B28963BD9001207AF /* BlissGameCore.h in Headers */ = {isa = PBXBuildFile; fileRef = C66DFC190F51D82F0080AA28 /* BlissGameCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B3EA6CD62926239F00010224 /* PVSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3D17FF928963A54001207AF /* PVSupport.framework */; };
+		B3EB8B20293F75B500BCCBAE /* Core.plist in Resources */ = {isa = PBXBuildFile; fileRef = B3EB8B1F293F75B400BCCBAE /* Core.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -205,6 +206,7 @@
 		B3D1800028963A6C001207AF /* PVSupport.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PVSupport.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3D1800428963A74001207AF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS16.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		B3D1800628963A79001207AF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS16.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		B3EB8B1F293F75B400BCCBAE /* Core.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Core.plist; sourceTree = "<group>"; };
 		C66DFC180F51D82F0080AA28 /* BlissGameCore.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BlissGameCore.mm; sourceTree = "<group>"; };
 		C66DFC190F51D82F0080AA28 /* BlissGameCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlissGameCore.h; sourceTree = "<group>"; };
 		C6D120E71711302600E868A8 /* OpenEmuBase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenEmuBase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -260,6 +262,7 @@
 		089C167CFE841241C02AAC07 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B3EB8B1F293F75B400BCCBAE /* Core.plist */,
 				275CEEB119D5190E00901DD8 /* knowncarts.cfg */,
 				8D5B49B7048680CD000E48DA /* Info.plist */,
 				089C167DFE841241C02AAC07 /* InfoPlist.strings */,
@@ -607,6 +610,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3EB8B20293F75B500BCCBAE /* Core.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

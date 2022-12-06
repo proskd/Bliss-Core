@@ -29,7 +29,7 @@
 #import <PVSupport/PVSupport-Swift.h>
 
 __attribute__((visibility("default")))
-@interface BlissGameCore : PVEmulatorCore<PVIntellivisionSystemResponderClient>
+@interface PVBlissGameCore : PVEmulatorCore<PVIntellivisionSystemResponderClient>
 {
 }
 

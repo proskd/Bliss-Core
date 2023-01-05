@@ -59,6 +59,7 @@
 		B36703862896358400F75595 /* BlissGameCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = C66DFC180F51D82F0080AA28 /* BlissGameCore.mm */; };
 		B3D17FFD28963A5C001207AF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 089C1672FE841209C02AAC07 /* Foundation.framework */; };
 		B3D1800B28963BD9001207AF /* BlissGameCore.h in Headers */ = {isa = PBXBuildFile; fileRef = C66DFC190F51D82F0080AA28 /* BlissGameCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3E54935296654D0009BFDB9 /* PVEmulatorCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3E54934296654D0009BFDB9 /* PVEmulatorCore.framework */; };
 		B3EA6CD62926239F00010224 /* PVSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3D17FF928963A54001207AF /* PVSupport.framework */; };
 		B3EB8B20293F75B500BCCBAE /* Core.plist in Resources */ = {isa = PBXBuildFile; fileRef = B3EB8B1F293F75B400BCCBAE /* Core.plist */; };
 		B3EB8B21293F78F700BCCBAE /* knowncarts.cfg in Resources */ = {isa = PBXBuildFile; fileRef = 275CEEB119D5190E00901DD8 /* knowncarts.cfg */; };
@@ -207,6 +208,7 @@
 		B3D1800028963A6C001207AF /* PVSupport.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PVSupport.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3D1800428963A74001207AF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS16.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		B3D1800628963A79001207AF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS16.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		B3E54934296654D0009BFDB9 /* PVEmulatorCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PVEmulatorCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3EB8B1F293F75B400BCCBAE /* Core.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Core.plist; sourceTree = "<group>"; };
 		C66DFC180F51D82F0080AA28 /* BlissGameCore.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BlissGameCore.mm; sourceTree = "<group>"; };
 		C66DFC190F51D82F0080AA28 /* BlissGameCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlissGameCore.h; sourceTree = "<group>"; };
@@ -226,6 +228,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3E54935296654D0009BFDB9 /* PVEmulatorCore.framework in Frameworks */,
 				B312F91B292B0D1700286CFE /* libbliss.a in Frameworks */,
 				B3EA6CD62926239F00010224 /* PVSupport.framework in Frameworks */,
 				B3D17FFD28963A5C001207AF /* Foundation.framework in Frameworks */,
@@ -512,6 +515,7 @@
 		B3D17FF828963A54001207AF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B3E54934296654D0009BFDB9 /* PVEmulatorCore.framework */,
 				B3D1800628963A79001207AF /* Foundation.framework */,
 				B3D1800428963A74001207AF /* UIKit.framework */,
 				B3D1800028963A6C001207AF /* PVSupport.framework */,

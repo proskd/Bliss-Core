@@ -25,7 +25,8 @@
  */
 
 #import "BlissGameCore.h"
-
+#import <PVEmulatorCore/PVEmulatorCore.h>
+#import <PVEmulatorCore/PVEmulatorCore-Swift.h>
 #if __has_include(<OpenGL/OpenGL.h>)
 #import <OpenGL/gl3.h>
 #import <OpenGL/gl3ext.h>

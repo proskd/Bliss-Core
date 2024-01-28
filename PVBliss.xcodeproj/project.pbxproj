@@ -200,6 +200,7 @@
 		275CEEF519D5195B00901DD8 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B312F8E3292B0CCA00286CFE /* libbliss.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libbliss.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B32987C62B65A22100728996 /* BuildFlags.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BuildFlags.xcconfig; sourceTree = "<group>"; };
 		B367037D2896357300F75595 /* PVBliss.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PVBliss.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B367037F2896357400F75595 /* PVBliss.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PVBliss.h; sourceTree = "<group>"; };
 		B3D17FF928963A54001207AF /* PVSupport.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PVSupport.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -238,6 +239,7 @@
 		089C166AFE841209C02AAC07 /* CrabEmu */ = {
 			isa = PBXGroup;
 			children = (
+				B32987C62B65A22100728996 /* BuildFlags.xcconfig */,
 				08FB77AFFE84173DC02AAC07 /* Classes */,
 				32C88E010371C26100C91783 /* Bliss-Core */,
 				089C167CFE841241C02AAC07 /* Resources */,
@@ -705,6 +707,7 @@
 /* Begin XCBuildConfiguration section */
 		1DEB913F08733D840010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B32987C62B65A22100728996 /* BuildFlags.xcconfig */;
 			buildSettings = {
 				ALLOW_TARGET_PLATFORM_SPECIALIZATION = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -752,6 +755,7 @@
 		};
 		1DEB914008733D840010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B32987C62B65A22100728996 /* BuildFlags.xcconfig */;
 			buildSettings = {
 				ALLOW_TARGET_PLATFORM_SPECIALIZATION = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1005,6 +1009,7 @@
 		};
 		B3AF0E3329404FD200F96B9F /* Archive */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B32987C62B65A22100728996 /* BuildFlags.xcconfig */;
 			buildSettings = {
 				ALLOW_TARGET_PLATFORM_SPECIALIZATION = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;

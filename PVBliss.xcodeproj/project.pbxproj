@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B30E98FD2C6EF16E00C1431E /* PVSupport in Frameworks */ = {isa = PBXBuildFile; productRef = B30E98FC2C6EF16E00C1431E /* PVSupport */; };
+		B30E9B222C6FD22C00C1431E /* PVEmulatorCore in Frameworks */ = {isa = PBXBuildFile; productRef = B30E9B212C6FD22C00C1431E /* PVEmulatorCore */; };
+		B30E9B252C6FD23700C1431E /* PVCoreBridge in Frameworks */ = {isa = PBXBuildFile; productRef = B30E9B242C6FD23700C1431E /* PVCoreBridge */; };
 		B312F8EC292B0CDD00286CFE /* JoyPad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE5A19D5189B00901DD8 /* JoyPad.cpp */; };
 		B312F8ED292B0CDD00286CFE /* SP0256_Registers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE7519D518D200901DD8 /* SP0256_Registers.cpp */; };
 		B312F8EE292B0CDD00286CFE /* ProcessorBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 275CEE8819D518E500901DD8 /* ProcessorBus.cpp */; };
@@ -228,9 +231,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B30E98FD2C6EF16E00C1431E /* PVSupport in Frameworks */,
 				B3E54935296654D0009BFDB9 /* PVEmulatorCore.framework in Frameworks */,
 				B312F91B292B0D1700286CFE /* libbliss.a in Frameworks */,
-				B3EA6CD62926239F00010224 /* PVSupport.framework in Frameworks */,
+				B30E9B252C6FD23700C1431E /* PVCoreBridge in Frameworks */,
+				B30E9B222C6FD22C00C1431E /* PVEmulatorCore in Frameworks */,
 				B3D17FFD28963A5C001207AF /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1192,6 +1197,36 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		B30E98FB2C6EF16E00C1431E /* XCLocalSwiftPackageReference "../../PVSupport" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../PVSupport;
+		};
+		B30E9B202C6FD22C00C1431E /* XCLocalSwiftPackageReference "../../PVEmulatorCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../PVEmulatorCore;
+		};
+		B30E9B232C6FD23700C1431E /* XCLocalSwiftPackageReference "../../PVCoreBridge" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../PVCoreBridge;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B30E98FC2C6EF16E00C1431E /* PVSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PVSupport;
+		};
+		B30E9B212C6FD22C00C1431E /* PVEmulatorCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PVEmulatorCore;
+		};
+		B30E9B242C6FD23700C1431E /* PVCoreBridge */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PVCoreBridge;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 089C1669FE841209C02AAC07 /* Project object */;
 }

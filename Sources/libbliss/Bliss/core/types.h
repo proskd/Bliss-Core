@@ -2,9 +2,9 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+//#ifdef __cplusplus
+//extern "C" {
+//#endif
 
 //primitive types
 typedef signed char				INT8;
@@ -116,9 +116,9 @@ typedef struct
 
 #endif /* __MACH__ */
 
-#ifdef __cplusplus
-}
-#endif
+//#ifdef __cplusplus
+//}
+//#endif
 
 #endif //TYPES_H
 

@@ -24,9 +24,14 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "BlissGameCore.h"
-#import <PVEmulatorCore/PVEmulatorCore.h>
-#import <PVEmulatorCore/PVEmulatorCore-Swift.h>
+#import "BlissGameCoreBridge.h"
+
+@import PVEmulatorCore;
+@import PVCoreBridge;
+@import PVCoreObjCBridge;
+@import PVLoggingObjC;
+@import PVAudio;
+
 #if __has_include(<OpenGL/OpenGL.h>)
 #import <OpenGL/gl3.h>
 #import <OpenGL/gl3ext.h>
@@ -41,8 +46,7 @@
 #import <UIKit/UIKeyConstants.h>
 #endif
 
-#import <PVSupport/PVSupport-Swift.h>
-
+@import libbliss;
 #import "core/Emulator.h"
 #import "core/rip/Rip.h"
 #import "core/audio/AudioMixer.h"
@@ -63,15 +67,15 @@
 #define INTY_ON(bits, flag)   ((bits) |=  (uint64_t)(flag))
 #define INTY_OFF(bits, flag)  ((bits) &= ~(uint64_t)(flag))
 
-typedef struct
-{
+#define GET_CURRENT_OR_RETURN(...) __strong __typeof__(_current) current = _current; if(current == nil) return __VA_ARGS__;
+
+typedef struct {
 	UINT16	keypad;
 	UINT16	action;
 	UINT16	disc;
 } BlissController;
 
-class BlissInputProducer : public InputProducer
-{
+class BlissInputProducer : public InputProducer {
 public:
 	BlissInputProducer();
 
@@ -96,43 +100,43 @@ private:
 	BOOL keyboardDevice;
 };
 
-class BlissAudioMixer : public AudioMixer
-{
+class BlissAudioMixer : public AudioMixer {
 public:
 	void		init(UINT32 sampleRate);
 	void		release();
 	void		flushAudio();
 };
 
-class BlissVideoBus : public VideoBus
-{
+class BlissVideoBus : public VideoBus {
 public:
 	void		init(UINT32 width, UINT32 height);
 	void		release();
 	void		render();
 };
 
-@interface PVBlissGameCore () <PVIntellivisionSystemResponderClient>
-{
-	NSLock			*_bufferLock;
-	OERingBuffer	*_audioBuffer;
-	unsigned char	*_videoBuffer;
+@interface PVBlissGameCoreBridge () <PVIntellivisionSystemResponderClient> {
+	NSLock			    *_bufferLock;
+    id<RingBufferProtocol> _audioBuffer;
+	unsigned char	    *_videoBuffer;
 	BlissAudioMixer	*_audioMixer;
-	BlissVideoBus	*_videoBus;
+	BlissVideoBus	    *_videoBus;
 
-    NSString		*_ROMName;
-	Emulator		*currentEmu;
-	Rip				*currentRip;
+    NSString		    *_ROMName;
+	Emulator		    *currentEmu;
+	Rip				    *currentRip;
 
-	NSMutableData	*_stateData;
+	NSMutableData	    *_stateData;
+    
+    UINT32 targetSystemID;
+    
+    dispatch_queue_t audioQueue;
 }
 - (int)blissButtonForIntellivisionButton:(PVIntellivisionButton)button player:(NSUInteger)player;
 @end
 
-@implementation PVBlissGameCore
+@implementation PVBlissGameCoreBridge
 
 // Global variables because the callbacks need to access them...
-static PVBlissGameCore *_currentCore;
 static BlissController _controller[2] = {0};
 static uint64_t _keyboard = 0;
 static uint8_t _keyboardDownCount = 0;
@@ -144,39 +148,38 @@ static uint8_t _keyboardShiftCount = 0;
  OpenEmu Core internal functions
  */
 
-- (id)init
-{
+- (instancetype)init {
     self = [super init];
-    if(self != nil)
-    {
+    if(self != nil) {
         _bufferLock = [[NSLock alloc] init];
 
-		_currentCore = self;
+		_current = self;
 
 		_audioMixer = new BlissAudioMixer;
 		_videoBus = new BlissVideoBus;
 
 		_stateData = [NSMutableData dataWithLength:sizeof(IntellivisionState)];
+        
+        dispatch_queue_attr_t priorityAttribute = dispatch_queue_attr_make_with_qos_class( DISPATCH_QUEUE_SERIAL, QOS_CLASS_USER_INTERACTIVE, 0);
+        audioQueue = dispatch_queue_create("com.provenance.jaguar.audio", priorityAttribute);
     }
 
     return self;
 }
 
-- (void)dealloc
-{
-    DLog(@"releasing/deallocating Bliss memory");
+- (void)dealloc {
+    VLOG(@"releasing/deallocating Bliss memory");
 
 	delete _videoBus;
 	_videoBus = NULL;
 	delete _audioMixer;
 	_audioMixer = NULL;
 
-	_currentCore = NULL;
+	_current = NULL;
 }
 
-- (void)executeFrame
-{
-    //DLog(@"Executing");
+- (void)executeFrame {
+    //DLOG(@"Executing");
 
 	// run the emulation
 	currentEmu->Run();
@@ -190,33 +193,96 @@ static uint8_t _keyboardShiftCount = 0;
 
 #pragma mark - Bliss Core Helpers
 
-- (BOOL)LoadRip:(const char*)filename
-{
+- (BOOL)LoadRip:(const char*)filename error:(NSError **)outError  {
 	char cfgFilename[PATH_MAX] = {0};
-	NSString *cfgString = [[NSBundle bundleForClass:[self class]] pathForResource:@"knowncarts" ofType:@"cfg" inDirectory:@""];
+   
+    
+    NSString *cfgString = self.knownCartsPath;
+    if (!cfgString) {
+        NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+        cfgString = [bundle pathForResource:@"knowncarts"
+                                               ofType:@"cfg"];
+        if (!cfgString) {
+            cfgString = [NSBundle.mainBundle pathForResource:@"knowncarts"
+                                                      ofType:@"cfg"];
+        }
+    }
+    
+    if (cfgString == nil || cfgString.length < 5) {
+        ELOG(@"Required file `knowncarts.cfg` not found");
+        NSDictionary *userInfo = @{
+            NSLocalizedDescriptionKey: @"Failed to load `knowncarts.cfg`.",
+            NSLocalizedFailureReasonErrorKey: cfgString == nil ? @"Path was nil" : @"Path was invalid",
+            NSLocalizedRecoverySuggestionErrorKey: @"File a bug report."
+        };
+        *outError = [NSError errorWithDomain:CoreError.PVEmulatorCoreErrorDomain
+                                    code:PVEmulatorCoreErrorCodeCouldNotLoadRom
+                                userInfo:userInfo];
+        return false;
+    }
 	strncpy(cfgFilename, cfgString.fileSystemRepresentation, sizeof(cfgFilename));
 
-	if(!cfgFilename[0])
-		return FALSE;
+    if(!cfgFilename[0]) {
+        ELOG(@"cfgFilename is empty");
+        NSDictionary *userInfo = @{
+            NSLocalizedDescriptionKey: @"Failed to load `knowncarts.cfg`.",
+            NSLocalizedFailureReasonErrorKey: @"Path was empty",
+            NSLocalizedRecoverySuggestionErrorKey: @"File a bug report."
+        };
+        *outError = [NSError errorWithDomain:CoreError.PVEmulatorCoreErrorDomain
+                                    code:PVEmulatorCoreErrorCodeCouldNotLoadRom
+                                userInfo:userInfo];
+        return FALSE;
+    }
 
-	if(strlen(filename) < 5)
-		return FALSE;
+    if(strlen(filename) < 5) {
+        ELOG(@"filename < 5");
+        NSDictionary *userInfo = @{
+            NSLocalizedDescriptionKey: @"Failed to load `knowncarts.cfg`.",
+            NSLocalizedFailureReasonErrorKey: @"Path was invalid",
+            NSLocalizedRecoverySuggestionErrorKey: @"File a bug report."
+        };
+        *outError = [NSError errorWithDomain:CoreError.PVEmulatorCoreErrorDomain
+                                    code:PVEmulatorCoreErrorCodeCouldNotLoadRom
+                                userInfo:userInfo];
+        return FALSE;
+    }
 
 	const CHAR* extStart = filename + strlen(filename) - 4;
 	if(strcmpi(extStart, ".intv") == 0 || strcmpi(extStart, ".int") == 0 || strcmpi(extStart, ".bin") == 0)
 	{
 		//load the bin file as a Rip
 		currentRip = Rip::LoadBin(filename, cfgFilename);
-		if(currentRip == NULL)
-			return FALSE;
+        if(currentRip == NULL) {
+            ELOG(@"LoadBin(%s) failed", filename);
+            NSDictionary *userInfo = @{
+                NSLocalizedDescriptionKey: @"Failed to load ROM as a Intellivision ROM.",
+                NSLocalizedFailureReasonErrorKey: @"ROM failed to load as a RIP",
+                NSLocalizedRecoverySuggestionErrorKey: @"Try a different ROM."
+            };
+            *outError = [NSError errorWithDomain:CoreError.PVEmulatorCoreErrorDomain
+                                        code:PVEmulatorCoreErrorCodeCouldNotLoadRom
+                                    userInfo:userInfo];
+            return FALSE;
+        }
 	}
 	else if(strcmpi(extStart, ".a52") == 0)
 	{
 		//load the bin file as a Rip
 		currentRip = Rip::LoadA52(filename);
-		if(currentRip == NULL)
-			return FALSE;
-
+        if(currentRip == NULL) {
+            ELOG(@"LoadA52(%s) failed", filename);
+            NSDictionary *userInfo = @{
+                NSLocalizedDescriptionKey: @"Failed to load ROM as a A5200 ROM.",
+                NSLocalizedFailureReasonErrorKey: @"ROM failed to load as a RIP",
+                NSLocalizedRecoverySuggestionErrorKey: @"Try a different ROM."
+            };
+            *outError = [NSError errorWithDomain:CoreError.PVEmulatorCoreErrorDomain
+                                        code:PVEmulatorCoreErrorCodeCouldNotLoadRom
+                                    userInfo:userInfo];
+            return FALSE;
+        }
+        
 		CHAR fileSubname[MAX_PATH];
 		const CHAR* filenameStart = strrchr(filename, '/')+1;
 		strncpy(fileSubname, filenameStart, strlen(filenameStart)-4);
@@ -226,9 +292,11 @@ static uint8_t _keyboardShiftCount = 0;
 	{
 		//load the rom file as a Rip
 		currentRip = Rip::LoadRom(filename);
-		if(currentRip == NULL)
-			return FALSE;
-
+        if(currentRip == NULL) {
+            ELOG(@"LoadRom(%s) failed", filename);
+            return FALSE;
+        }
+        
 		CHAR fileSubname[MAX_PATH];
 		const CHAR* filenameStart = strrchr(filename, '/')+1;
 		strncpy(fileSubname, filenameStart, strlen(filenameStart)-4);
@@ -238,9 +306,11 @@ static uint8_t _keyboardShiftCount = 0;
 	{
 		//load the zip file as a Rip
 		currentRip = Rip::LoadZip(filename, cfgFilename);
-		if(currentRip == NULL)
-			return FALSE;
-
+        if(currentRip == NULL) {
+            ELOG(@"LoadZip(%s) failed", filename);
+            return FALSE;
+        }
+        
 		CHAR fileSubname[MAX_PATH];
 		const CHAR* filenameStart = strrchr(filename, '/')+1;
 		strncpy(fileSubname, filenameStart, strlen(filenameStart)-4);
@@ -250,36 +320,34 @@ static uint8_t _keyboardShiftCount = 0;
 	{
 		//load the designated Rip
 		currentRip = Rip::LoadRip(filename);
-		if(currentRip == NULL)
-			return FALSE;
+        if(currentRip == NULL) {
+            ELOG(@"LoadRip(%s) failed", filename);
+            return FALSE;
+        }
 	}
 
 	return TRUE;
 }
 
-- (BOOL)loadROMForPeripheral:(Peripheral*)peripheral
-{
+- (BOOL)loadROMForPeripheral:(Peripheral*)peripheral {
 	BOOL didLoadROMs = NO;
 	NSString *BIOSPath = nil;
 	UINT16 count = peripheral->GetROMCount();
 
-	for(UINT16 i = 0; i < count; i++)
-	{
+	for(UINT16 i = 0; i < count; i++) {
 		ROM* r = peripheral->GetROM(i);
-		if(r->isLoaded())
-		{
+		if(r->isLoaded()){
 			didLoadROMs = YES;
 			continue;
 		}
 
 		BIOSPath = [[self BIOSPath] stringByAppendingString:[NSString stringWithFormat:@"/%s", r->getDefaultFileName()]];
 
-		if(r->load([BIOSPath fileSystemRepresentation], r->getDefaultFileOffset()))
-		{
+        ILOG(@"Attempting to load BIOS at `%@`", BIOSPath);
+        
+		if(r->load([BIOSPath fileSystemRepresentation], r->getDefaultFileOffset())){
 			didLoadROMs = YES;
-		}
-		else
-		{
+		} else {
 			didLoadROMs = NO;
 			break;
 		}
@@ -288,67 +356,59 @@ static uint8_t _keyboardShiftCount = 0;
 	return didLoadROMs;
 }
 
-- (void)ReleasePeripheralInputs:(Peripheral*)periph
-{
+- (void)ReleasePeripheralInputs:(Peripheral*)periph {
 	UINT16 count = periph->GetInputConsumerCount();
 
-	for(UINT16 i = 0; i < count; i++)
-	{
+	for(UINT16 i = 0; i < count; i++) {
 		InputConsumer* nextInputConsumer = periph->GetInputConsumer(i);
 
 		//iterate through each object on this consumer (buttons, keys, etc.)
 		int iccount = nextInputConsumer->getInputConsumerObjectCount();
 
-		for(int j = 0; j < iccount; j++)
-		{
+		for(int j = 0; j < iccount; j++) {
 			InputConsumerObject* nextObject = nextInputConsumer->getInputConsumerObject(j);
 
-			if(nextObject)
-			{
+			if(nextObject) {
 				nextObject->clearBindings();
 			}
 		}
 	}
 }
 
-- (void)ReleaseEmulatorInputs
-{
+- (void)ReleaseEmulatorInputs {
 	memset(_controller, 0, sizeof(_controller));
 	_keyboard = 0;
 	_keyboardDownCount = 0;
 	_keyboardShiftCount = 0;
 
-	if(!currentEmu)
-		return;
+    if(!currentEmu) {
+        ELOG(@"`currentEmu` is nil");
+        return;
+    }
 
 	[self ReleasePeripheralInputs:currentEmu];
 	UINT32 count = currentEmu->GetPeripheralCount();
 
-	for(UINT32 i = 0; i < count; i++)
-	{
+	for(UINT32 i = 0; i < count; i++) {
 		[self ReleasePeripheralInputs:currentEmu->GetPeripheral(i)];
 	}
 }
 
-- (void)InitializePeripheralInputs:(Peripheral*)periph
-{
-	//iterate through all the emulated input consumers in the current emulator.
-	//these consumers represent the emulated joysticks, keyboards, etc. that were
-	//originally used to provide input to the emulated system
+- (void)InitializePeripheralInputs:(Peripheral*)periph {
+	/// iterate through all the emulated input consumers in the current emulator.
+	/// these consumers represent the emulated joysticks, keyboards, etc. that were
+	/// originally used to provide input to the emulated system
 	UINT16 count = periph->GetInputConsumerCount();
-	for(UINT16 i = 0; i < count; i++)
-	{
+	for(UINT16 i = 0; i < count; i++) {
 		InputConsumer* nextInputConsumer = periph->GetInputConsumer(i);
 		BOOL isKeyboard = dynamic_cast<ECSKeyboard*>(nextInputConsumer) ? TRUE : FALSE;
 
 		//iterate through each object on this consumer (buttons, keys, etc.)
 		int iccount = nextInputConsumer->getInputConsumerObjectCount();
-		for(int j = 0; j < iccount; j++)
-		{
+		for(int j = 0; j < iccount; j++) {
 			InputConsumerObject* nextObject = nextInputConsumer->getInputConsumerObject(j);
 
-			if(nextObject)
-			{
+			if(nextObject) {
 				INT32 _objectids[1] = {nextObject->getDefaultEnum()};
 				INT32 *objectids = _objectids;
 				InputProducer** producerList = new InputProducer*[0];
@@ -364,68 +424,107 @@ static uint8_t _keyboardShiftCount = 0;
 	}
 }
 
-- (void)InitializeEmulatorInputs
-{
+- (void)InitializeEmulatorInputs {
 	[self ReleaseEmulatorInputs];
 
 	[self InitializePeripheralInputs:currentEmu];
 
 	UINT32 count = currentEmu->GetPeripheralCount();
 
-	for(UINT32 i = 0; i < count; i++)
-	{
+	for(UINT32 i = 0; i < count; i++) {
 		[self InitializePeripheralInputs:currentEmu->GetPeripheral(i)];
 	}
 }
 
 #pragma mark - OpenEmu Core
 
-- (BOOL)loadFileAtPath:(NSString *)path error:(NSError **)error
-{
+- (BOOL)loadFileAtPath:(NSString *)path error:(NSError **)error {
     _ROMName = [path copy];
 
-	if(![self LoadRip:path.fileSystemRepresentation])
-	{
-		return FALSE;
+    NSError *loadRipError;
+    BOOL loaded = [self LoadRip:path.fileSystemRepresentation error: &loadRipError];
+    
+	if(!loaded) {
+        if (loadRipError) {
+            *error = loadRipError;
+        } else {
+            NSDictionary *userInfo = @{
+                NSLocalizedDescriptionKey: @"Failed to load ROM.",
+                NSLocalizedFailureReasonErrorKey: FORMAT(@"Bliss failed to load `%@`", path),
+                NSLocalizedRecoverySuggestionErrorKey: @"Try a different ROM file."
+            };
+            *error = [NSError errorWithDomain:CoreError.PVEmulatorCoreErrorDomain
+                                        code:PVEmulatorCoreErrorCodeCouldNotLoadRom
+                                    userInfo:userInfo];
+        }
+		return NO;
 	}
 
-	DLog(@"Loaded File");
+	DLOG(@"Loaded File");
 
 	// find the currentEmulator required to run this RIP
-	currentEmu = Emulator::GetEmulatorByID(currentRip->GetTargetSystemID());
+//    ID_SYSTEM_ATARI5200
+//    ID_SYSTEM_INTELLIVISION
+//	currentEmu = Emulator::GetEmulatorByID(currentRip->GetTargetSystemID());
+    if ([self.systemIdentifier containsString:@"intellivision"]) {
+        targetSystemID = ID_SYSTEM_INTELLIVISION;
+    } else if ([self.systemIdentifier containsString:@"5200"]) {
+        targetSystemID = ID_SYSTEM_ATARI5200;
+    }
+    currentEmu = Emulator::GetEmulatorByID(targetSystemID);
 
+    if(currentEmu == nil) {
+        NSDictionary *userInfo = @{
+            NSLocalizedDescriptionKey: @"Failed to load emulator core.",
+            NSLocalizedFailureReasonErrorKey: @"Bliss failed to determine the correct sub-core.",
+            NSLocalizedRecoverySuggestionErrorKey: @""
+        };
+        *error = [NSError errorWithDomain:CoreError.PVEmulatorCoreErrorDomain
+                                    code:PVEmulatorCoreErrorCodeCouldNotLoadRom
+                                userInfo:userInfo];
+        return NO;
+    }
+    
 	// load emulator ROMs
-	if(![self loadROMForPeripheral:currentEmu])
-	{
+	if(![self loadROMForPeripheral:currentEmu]) {
+        NSDictionary *userInfo = @{
+            NSLocalizedDescriptionKey: @"Failed to load peripheral BIOS.",
+            NSLocalizedFailureReasonErrorKey: @"Bliss failed to load BIOS for peripheral.",
+            NSLocalizedRecoverySuggestionErrorKey: @"Import the correct BIOSes."
+        };
+        *error = [NSError errorWithDomain:CoreError.PVEmulatorCoreErrorDomain
+                                    code:PVEmulatorCoreErrorCodeCouldNotLoadRom
+                                userInfo:userInfo];
 		return NO;
 	}
 
 	// load peripheral ROMs
 	INT32 count = currentEmu->GetPeripheralCount();
-	for(INT32 i = 0; i < count; i++)
-	{
+	for(INT32 i = 0; i < count; i++) {
 		Peripheral* p = currentEmu->GetPeripheral(i);
 		PeripheralCompatibility usage = currentRip->GetPeripheralUsage(p->GetShortName());
-		if(usage == PERIPH_INCOMPATIBLE || usage == PERIPH_COMPATIBLE)
-		{
+		if(usage == PERIPH_INCOMPATIBLE || usage == PERIPH_COMPATIBLE) {
 			currentEmu->UsePeripheral(i, FALSE);
 			continue;
 		}
 
 		BOOL loaded = [self loadROMForPeripheral:p];
-		if(loaded)
-		{
+		if(loaded) {
 			//peripheral loaded, might as well use it.
 			currentEmu->UsePeripheral(i, TRUE);
-		}
-		else if(usage == PERIPH_OPTIONAL)
-		{
+		} else if(usage == PERIPH_OPTIONAL) {
 			//didn't load, but the peripheral is optional, so just skip it
 			currentEmu->UsePeripheral(i, FALSE);
-		}
-		else
-		{
+		} else {
 			//usage == PERIPH_REQUIRED, but it didn't load
+            NSDictionary *userInfo = @{
+                NSLocalizedDescriptionKey: @"Failed to load BIOS.",
+                NSLocalizedFailureReasonErrorKey: @"Bliss failed to required load BIOS for peripheral.",
+                NSLocalizedRecoverySuggestionErrorKey: @"Import the correct BIOS."
+            };
+            *error = [NSError errorWithDomain:CoreError.PVEmulatorCoreErrorDomain
+                                        code:PVEmulatorCoreErrorCodeCouldNotLoadRom
+                                    userInfo:userInfo];
 			return NO;
 		}
 	}
@@ -445,23 +544,19 @@ static uint8_t _keyboardShiftCount = 0;
     return YES;
 }
 
-- (void)resetEmulation
-{
+- (void)resetEmulation {
 	currentEmu->Reset();
 }
 
-- (void)stopEmulation
-{
-	if(currentEmu)
-	{
+- (void)stopEmulation {
+	if(currentEmu) {
 		currentEmu->SetRip(NULL);
 		currentEmu->ReleaseAudio();
 		currentEmu->ReleaseVideo();
 		currentEmu = NULL;
 	}
 
-	if(currentRip)
-	{
+	if(currentRip) {
 		delete currentRip;
 		currentRip = NULL;
 	}
@@ -469,23 +564,19 @@ static uint8_t _keyboardShiftCount = 0;
     [super stopEmulation];
 }
 
-- (CGSize)bufferSize
-{
+- (CGSize)bufferSize {
     return CGSizeMake(INTV_IMAGE_WIDTH, INTV_IMAGE_HEIGHT);
 }
 
-- (CGRect)screenRect
-{
+- (CGRect)screenRect {
     return CGRectMake(0, 0, INTV_IMAGE_WIDTH, INTV_IMAGE_HEIGHT);
 }
 
-- (CGSize)aspectSize
-{
+- (CGSize)aspectSize {
     return CGSizeMake(INTV_IMAGE_WIDTH * (12.0/7.0), INTV_IMAGE_HEIGHT);
 }
 
-- (const void *)getVideoBufferWithHint:(void *)hint
-{
+- (const void *)getVideoBufferWithHint:(void *)hint {
     if (!hint) {
         if (!_videoBuffer) _videoBuffer = new unsigned char[256 * 256 * 4];
         hint = _videoBuffer;
@@ -510,7 +601,8 @@ static uint8_t _keyboardShiftCount = 0;
 
 - (GLenum)pixelType
 {
-    return GL_UNSIGNED_INT;
+    return GL_UNSIGNED_BYTE;
+//    return GL_UNSIGNED_INT;
 //    return GL_UNSIGNED_INT_8_8_8_8_REV;
 }
 
@@ -534,6 +626,10 @@ static uint8_t _keyboardShiftCount = 0;
 - (NSUInteger)audioBitDepth
 {
 	return 16;
+}
+
+- (id<RingBufferProtocol>)ringBufferAtIndex:(NSUInteger)index {
+    return _audioBuffer;
 }
 
 - (void)saveStateToFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
@@ -566,8 +662,7 @@ static uint8_t _keyboardShiftCount = 0;
     block(didLoadStateFile, nil);
 }
 
-- (NSData *)serializeStateWithError:(NSError **)outError
-{
+- (NSData *)serializeStateWithError:(NSError **)outError {
 	void *stateBuffer = [_stateData mutableBytes];
 	NSUInteger stateLength = [_stateData length];
 	BOOL didSaveStateData = NO;
@@ -618,18 +713,16 @@ static uint8_t _keyboardShiftCount = 0;
 
 void BlissAudioMixer::init(UINT32 sampleRate)
 {
-	int sampleInterval = (sampleRate / [_currentCore frameInterval]);
+    GET_CURRENT_OR_RETURN();
+    
+	int sampleInterval = (sampleRate / [current frameInterval]);
 
 	// initialize the sampleBuffer
 	AudioMixer::init(sampleRate);
-
-	_currentCore->_audioBuffer = [_currentCore ringBufferAtIndex:0];
-
-	if(_currentCore->_audioBuffer)
-	{
-#warning May not need this
-		[_currentCore->_audioBuffer setLength:(sizeof(INT16) * sampleInterval * 8)];
-	}
+    
+    int bufferLength = (sizeof(INT16) * sampleInterval * 8) * 2;
+    current->_audioBuffer = [RingBufferFactory makeWithType:RingBufferTypeProvenance
+                                                      withLength:bufferLength];
 }
 
 void BlissAudioMixer::release()
@@ -639,15 +732,19 @@ void BlissAudioMixer::release()
 
 void BlissAudioMixer::flushAudio()
 {
+    GET_CURRENT_OR_RETURN();
+
 	NSUInteger bytesPerSample = sizeof(INT16);
 	NSUInteger bytesToWrite = sampleCount * bytesPerSample;
 
-	[_currentCore->_bufferLock lock];
-	[_currentCore->_audioBuffer write:this->sampleBuffer maxLength:bytesToWrite];
-	[_currentCore->_bufferLock unlock];
-
-	// updates buffer write position and sample count
-	AudioMixer::flushAudio();
+    dispatch_async(current->audioQueue, ^{
+        [current->_bufferLock lock];
+        [current->_audioBuffer write:this->sampleBuffer size:bytesToWrite];
+        [current->_bufferLock unlock];
+        
+        // updates buffer write position and sample count
+        AudioMixer::flushAudio();
+    });
 }
 
 #pragma mark Bliss Video Bus
@@ -659,9 +756,11 @@ void BlissVideoBus::init(UINT32 width, UINT32 height)
 
 void BlissVideoBus::release()
 {
-    if (_currentCore->_videoBuffer) {
-        delete[] _currentCore->_videoBuffer;
-        _currentCore->_videoBuffer = NULL;
+    GET_CURRENT_OR_RETURN();
+
+    if (current->_videoBuffer) {
+        delete[] current->_videoBuffer;
+        current->_videoBuffer = NULL;
     }
 
 	VideoBus::release();
@@ -669,11 +768,13 @@ void BlissVideoBus::release()
 
 void BlissVideoBus::render()
 {
+    GET_CURRENT_OR_RETURN();
+
 	VideoBus::render();
 
-	[_currentCore->_bufferLock lock];
-	memcpy(_currentCore->_videoBuffer, this->pixelBuffer, this->pixelBufferSize);
-	[_currentCore->_bufferLock unlock];
+	[current->_bufferLock lock];
+	memcpy([current videoBuffer], this->pixelBuffer, this->pixelBufferSize);
+	[current->_bufferLock unlock];
 }
 
 #pragma mark Bliss Input Producer
@@ -951,7 +1052,7 @@ float BlissInputProducer::getValue(INT32 enumeration)
 				INTY_OFF(_keyboard, shiftflag);
 			}
 		}
-		//DLog(@"_keyboardShiftCount == %i", _keyboardShiftCount);
+		//DLOG(@"_keyboardShiftCount == %i", _keyboardShiftCount);
 	}
 
 	uint64_t keyflag = INTY_TO_BITMAP(key);
@@ -971,7 +1072,7 @@ float BlissInputProducer::getValue(INT32 enumeration)
 			_keyboard = 0;
 		}
 	}
-	//DLog(@"_keyboardDownCount == %i", _keyboardDownCount);
+	//DLOG(@"_keyboardDownCount == %i", _keyboardDownCount);
 }
 
 - (oneway void)keyDown:(unsigned short)keyCode

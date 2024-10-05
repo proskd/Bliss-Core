@@ -5,7 +5,7 @@
 	<key>PVCoreIdentifier</key>
 	<string>com.provenance.core.bliss</string>
 	<key>PVPrincipleClass</key>
-	<string>PVBlissGameCore</string>
+	<string>PVCoreBliss.PVCoreBliss</string>
 	<key>PVSupportedSystems</key>
 	<array>
 		<string>com.provenance.intellivision</string>

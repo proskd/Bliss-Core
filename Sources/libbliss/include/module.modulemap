@@ -1,0 +1,17 @@
+module libbliss {
+    header "../Bliss/core/Emulator.h"
+    header "../Bliss/core/rip/Rip.h"
+    header "../Bliss/core/audio/AudioMixer.h"
+    header "../Bliss/core/video/VideoBus.h"
+    header "../Bliss/drivers/intv/Intellivision.h"
+    header "../Bliss/drivers/intv/HandController.h"
+    header "../Bliss/drivers/intv/ECSKeyboard.h"
+    
+    header "../Bliss/core/cpu/Processor.h"
+    header "../Bliss/core/memory/RAM.h"
+    header "../Bliss/core/memory/ROM.h"
+    header "../Bliss/core/audio/AudioProducer.h"
+    header "../Bliss/core/video/VideoProducer.h"
+    header "../Bliss/core/input/InputConsumer.h"
+    export *
+}

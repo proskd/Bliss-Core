@@ -25,12 +25,24 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <PVSupport/PVSupport.h>
-#import <PVSupport/PVSupport-Swift.h>
 
+@import PVCoreObjCBridge;
+
+@protocol ObjCBridgedCoreBridge;
+@protocol PVIntellivisionSystemResponderClient;
+typedef enum PVIntellivisionButton: NSInteger PVIntellivisionButton;
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Weverything" // Silence "Cannot find protocol definition" warning due to forward declaration.
 __attribute__((visibility("default")))
-@interface PVBlissGameCore : PVEmulatorCore<PVIntellivisionSystemResponderClient>
-{
-}
+@interface PVBlissGameCoreBridge: PVCoreObjCBridge <ObjCBridgedCoreBridge, PVIntellivisionSystemResponderClient>
+#pragma clang diagnostic pop
+@property (nonatomic, retain, nullable) NSString*  knownCartsPath;
+
+// PVIntellivisionSystemResponderClient
+- (void)didPushIntellivisionButton:(PVIntellivisionButton)button forPlayer:(NSInteger)player;
+- (void)didReleaseIntellivisionButton:(PVIntellivisionButton)button forPlayer:(NSInteger)player;
 
 @end
+
+static __weak PVBlissGameCoreBridge *_current;

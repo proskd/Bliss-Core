@@ -1,0 +1,4 @@
+module PVCoreBlissBridge {
+    header "../BlissGameCoreBridge.h"
+    export *
+}

@@ -38,7 +38,7 @@ open class PVCoreBliss: PVEmulatorCore, @unchecked Sendable {
 
     // MARK: Lifecycle
     
-    let _bridge: PVBlissGameCoreBridge = .init()
+    lazy var _bridge: PVBlissGameCoreBridge = .init()
     
     public required init() {
         super.init()

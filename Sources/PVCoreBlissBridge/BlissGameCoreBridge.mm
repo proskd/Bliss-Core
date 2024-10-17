@@ -58,6 +58,9 @@
 #define INTV_IMAGE_WIDTH	(160)
 #define INTV_IMAGE_HEIGHT	(192)
 
+#define A5200_IMAGE_WIDTH    (336)
+#define A5200_IMAGE_HEIGHT    (240)
+
 #define KEYBOARD_OBJECT_COUNT 256
 #define AUDIO_SAMPLE_RATE 48000
 
@@ -589,58 +592,49 @@ static uint8_t _keyboardShiftCount = 0;
     return [self getVideoBufferWithHint:nil];
 }
 
-- (GLenum)pixelFormat
-{
-    return GL_BGRA;
-}
+- (GLenum)pixelFormat { return GL_RGB; }
 
-- (GLenum)internalPixelFormat
-{
-    return GL_BGRA;
-}
+- (GLenum)internalPixelForma { return GL_RGB; }
 
-- (GLenum)pixelType
-{
-    return GL_UNSIGNED_BYTE;
-//    return GL_UNSIGNED_INT;
-//    return GL_UNSIGNED_INT_8_8_8_8_REV;
-}
+- (GLenum)pixelType { return GL_UNSIGNED_SHORT; }
 
-- (NSTimeInterval)frameInterval
-{
+- (NSTimeInterval)frameInterval {
 	// http://spatula-city.org/~im14u2c/intv/tech/master.html
 	// Actual Effective Frame Rate
 	return 59.92;
 }
 
-- (NSUInteger)channelCount
-{
-	return 1;
-}
+- (NSUInteger)channelCount { return 1; }
 
-- (double)audioSampleRate
-{
-    return AUDIO_SAMPLE_RATE;
-}
+- (double)audioSampleRate { return AUDIO_SAMPLE_RATE; }
 
-- (NSUInteger)audioBitDepth
-{
-	return 16;
-}
+- (NSUInteger)audioBitDepth { return 16; }
 
 - (id<RingBufferProtocol>)ringBufferAtIndex:(NSUInteger)index {
     return _audioBuffer;
 }
 
-- (void)saveStateToFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
-{
+- (void)saveStateToFileAtPath:(NSString *)fileName completionHandler:(void (^)(NSError *))block {
 	BOOL didSaveStateFile = NO;
 	didSaveStateFile = currentEmu->SaveStateFile([fileName fileSystemRepresentation]);
-    block(didSaveStateFile, nil);
+    
+    if (!didSaveStateFile) {
+        NSDictionary *userInfo = @{
+                                   NSLocalizedDescriptionKey: @"Failed to save state.",
+                                   NSLocalizedFailureReasonErrorKey: @"Bliss failed to create save state.",
+                                   NSLocalizedRecoverySuggestionErrorKey: @""
+                                   };
+
+        NSError *newError = [NSError errorWithDomain:CoreError.PVEmulatorCoreErrorDomain
+                                                code:PVEmulatorCoreErrorCodeCouldNotSaveState
+                                            userInfo:userInfo];
+        block(newError);
+    } else {
+        block(nil);
+    }
 }
 
-- (void)loadStateFromFileAtPath:(NSString *)fileName completionHandler:(void (^)(BOOL, NSError *))block
-{
+- (void)loadStateFromFileAtPath:(NSString *)fileName completionHandler:(void (^)(NSError *))block {
 	BOOL didLoadStateFile = NO;
 
 	// TODO: is this an emulator bug, a state bug, or a hardware necessity?
@@ -659,7 +653,20 @@ static uint8_t _keyboardShiftCount = 0;
 	}
 
 	didLoadStateFile = currentEmu->LoadStateFile([fileName fileSystemRepresentation]);
-    block(didLoadStateFile, nil);
+    if (!didLoadStateFile) {
+        NSDictionary *userInfo = @{
+                                   NSLocalizedDescriptionKey: @"Failed to load state.",
+                                   NSLocalizedFailureReasonErrorKey: @"Bliss failed to load save state.",
+                                   NSLocalizedRecoverySuggestionErrorKey: @""
+                                   };
+
+        NSError *newError = [NSError errorWithDomain:CoreError.PVEmulatorCoreErrorDomain
+                                                code:PVEmulatorCoreErrorCodeCouldNotSaveState
+                                            userInfo:userInfo];
+        block(newError);
+    } else {
+        block(nil);
+    }
 }
 
 - (NSData *)serializeStateWithError:(NSError **)outError {
@@ -682,8 +689,7 @@ static uint8_t _keyboardShiftCount = 0;
     return nil;
 }
 
-- (BOOL)deserializeState:(NSData *)state withError:(NSError **)outError
-{
+- (BOOL)deserializeState:(NSData *)state withError:(NSError **)outError {
 	const void *stateBuffer = [state bytes];
 	NSUInteger stateLength = [_stateData length];
 	BOOL didLoadStateData = NO;
@@ -711,8 +717,7 @@ static uint8_t _keyboardShiftCount = 0;
 
 #pragma mark Bliss Audio Mixer
 
-void BlissAudioMixer::init(UINT32 sampleRate)
-{
+void BlissAudioMixer::init(UINT32 sampleRate) {
     GET_CURRENT_OR_RETURN();
     
 	int sampleInterval = (sampleRate / [current frameInterval]);
@@ -725,13 +730,11 @@ void BlissAudioMixer::init(UINT32 sampleRate)
                                                       withLength:bufferLength];
 }
 
-void BlissAudioMixer::release()
-{
+void BlissAudioMixer::release() {
 	AudioMixer::release();
 }
 
-void BlissAudioMixer::flushAudio()
-{
+void BlissAudioMixer::flushAudio() {
     GET_CURRENT_OR_RETURN();
 
 	NSUInteger bytesPerSample = sizeof(INT16);
@@ -749,13 +752,11 @@ void BlissAudioMixer::flushAudio()
 
 #pragma mark Bliss Video Bus
 
-void BlissVideoBus::init(UINT32 width, UINT32 height)
-{
+void BlissVideoBus::init(UINT32 width, UINT32 height) {
 	VideoBus::init(width, height);
 }
 
-void BlissVideoBus::release()
-{
+void BlissVideoBus::release() {
     GET_CURRENT_OR_RETURN();
 
     if (current->_videoBuffer) {
@@ -766,8 +767,7 @@ void BlissVideoBus::release()
 	VideoBus::release();
 }
 
-void BlissVideoBus::render()
-{
+void BlissVideoBus::render() {
     GET_CURRENT_OR_RETURN();
 
 	VideoBus::render();
@@ -780,45 +780,33 @@ void BlissVideoBus::render()
 #pragma mark Bliss Input Producer
 
 BlissInputProducer::BlissInputProducer()
-: InputProducer((GUID){0})
-{
+: InputProducer((GUID){0}) {
 }
 
-float BlissInputProducer::getValue(INT32 enumeration)
-{
+float BlissInputProducer::getValue(INT32 enumeration) {
 	BOOL isKeyboardDevice = this->isKeyboardDevice();
 	char player = this->player;
 	float value = 0.0f;
 
-	if(isKeyboardDevice)
-	{
+	if(isKeyboardDevice) {
 		uint64_t keyflag = INTY_TO_BITMAP(enumeration);
 
 		value = INTY_TEST(_keyboard, keyflag) == keyflag ? 1.0f : 0.0f;
-	}
-	else
-	{
-		if(enumeration >= CONTROLLER_DISC_DOWN && enumeration <= CONTROLLER_DISC_UP_LEFT)
-		{
+	} else {
+		if(enumeration >= CONTROLLER_DISC_DOWN && enumeration <= CONTROLLER_DISC_UP_LEFT) {
 			value = INTY_TEST(_controller[player].disc, enumeration) == enumeration ? 1.0f : 0.0f;
-		}
-		else if(enumeration == CONTROLLER_ACTION_TOP || enumeration == CONTROLLER_ACTION_BOTTOM_LEFT || enumeration == CONTROLLER_ACTION_BOTTOM_RIGHT)
-		{
+		} else if(enumeration == CONTROLLER_ACTION_TOP || enumeration == CONTROLLER_ACTION_BOTTOM_LEFT || enumeration == CONTROLLER_ACTION_BOTTOM_RIGHT) {
 			value = INTY_TEST(_controller[player].action, enumeration) == enumeration ? 1.0f : 0.0f;
-		}
-		else if(enumeration >= CONTROLLER_KEYPAD_THREE && enumeration <= CONTROLLER_KEYPAD_CLEAR)
-		{
+		} else if(enumeration >= CONTROLLER_KEYPAD_THREE && enumeration <= CONTROLLER_KEYPAD_CLEAR) {
 			value = INTY_TEST(_controller[player].keypad, enumeration) == enumeration ? 1.0f : 0.0f;
 		}
 	}
-
 	return value;
 }
 
 #pragma mark - PVIntellivisionSystemResponderClient
 
-- (int)blissButtonForIntellivisionButton:(PVIntellivisionButton)button player:(NSUInteger)player;
-{
+- (int)blissButtonForIntellivisionButton:(PVIntellivisionButton)button player:(NSUInteger)player; {
     int btn = -1;
 	static int OEBlissIntellivisionButton[] =
 	{
@@ -843,16 +831,14 @@ float BlissInputProducer::getValue(INT32 enumeration)
 		CONTROLLER_KEYPAD_ENTER
 	};
 
-	if(button < PVIntellivisionButtonCount && button >= PVIntellivisionButtonUp)
-	{
+	if(button < PVIntellivisionButtonCount && button >= PVIntellivisionButtonUp) {
 		btn = OEBlissIntellivisionButton[button];
 	}
 
 	return btn;
 }
 
-- (oneway void)setIntellivisionButton:(int)btn isDown:(BOOL)down forPlayer:(NSUInteger)player
-{
+- (oneway void)setIntellivisionButton:(int)btn isDown:(BOOL)down forPlayer:(NSUInteger)player {
 	switch(btn)
 	{
 		case CONTROLLER_DISC_DOWN:
@@ -865,12 +851,9 @@ float BlissInputProducer::getValue(INT32 enumeration)
 			// if both horizontal + vertical disc directions are active,
 			// turn on the wide bit flag for 45-degree angles
 			if((_controller[player-1].disc & (CONTROLLER_DISC_LEFT|CONTROLLER_DISC_RIGHT))
-			   && (_controller[player-1].disc & (CONTROLLER_DISC_UP|CONTROLLER_DISC_DOWN)))
-			{
+			   && (_controller[player-1].disc & (CONTROLLER_DISC_UP|CONTROLLER_DISC_DOWN))) {
 				INTY_ON(_controller[player-1].disc, CONTROLLER_DISC_WIDE);
-			}
-			else
-			{
+			} else {
 				INTY_OFF(_controller[player-1].disc, CONTROLLER_DISC_WIDE);
 			}
 			break;
@@ -902,32 +885,26 @@ float BlissInputProducer::getValue(INT32 enumeration)
 	}
 }
 
-- (void)didPushIntellivisionButton:(PVIntellivisionButton)button forPlayer:(NSInteger)player;
-{
+- (void)didPushIntellivisionButton:(PVIntellivisionButton)button forPlayer:(NSInteger)player; {
     int btn = [self blissButtonForIntellivisionButton:button player:player];
     
-	if(btn > -1)
-	{
+	if(btn > -1) {
 		[self setIntellivisionButton:btn isDown:YES forPlayer:player];
 	}
 }
 
-- (void)didReleaseIntellivisionButton:(PVIntellivisionButton)button forPlayer:(NSInteger)player;
-{
+- (void)didReleaseIntellivisionButton:(PVIntellivisionButton)button forPlayer:(NSInteger)player; {
     int btn = [self blissButtonForIntellivisionButton:button player:player];
     
-	if(btn > -1)
-	{
+	if(btn > -1) {
 		[self setIntellivisionButton:btn isDown:NO forPlayer:player];
 	}
 }
 
-- (int)intellivisionKeyForKeyCode:(unsigned short)keyCode
-{
+- (int)intellivisionKeyForKeyCode:(unsigned short)keyCode {
 	int btn = -1;
 #if !TARGET_OS_OSX
-    switch(keyCode)
-	{
+    switch(keyCode) {
 		default: break;
 		case UIKeyboardHIDUsageKeyboardA: btn = ECS_KEYBOARD_A; break;
 		case UIKeyboardHIDUsageKeyboardB: btn = ECS_KEYBOARD_B; break;
@@ -997,8 +974,7 @@ float BlissInputProducer::getValue(INT32 enumeration)
 	return btn;
 }
 
-- (BOOL)isIntellivisionKeyShiftedForKeycode:(unsigned short)keyCode
-{
+- (BOOL)isIntellivisionKeyShiftedForKeycode:(unsigned short)keyCode {
 #if !TARGET_OS_OSX
 	switch(keyCode)
 	{
@@ -1015,15 +991,12 @@ float BlissInputProducer::getValue(INT32 enumeration)
 	return NO;
 }
 
-- (void)setIntellivisionKey:(int)key isDown:(BOOL)down isShifted:(BOOL)shifted
-{
+- (void)setIntellivisionKey:(int)key isDown:(BOOL)down isShifted:(BOOL)shifted {
 	uint64_t shiftflag = INTY_TO_BITMAP(ECS_KEYBOARD_SHIFT);
 
 	// HACK: double re-map
-	if(_keyboardShiftCount > 0)
-	{
-		switch(key)
-		{
+	if(_keyboardShiftCount > 0) {
+		switch(key) {
 			default: break;
 			case ECS_KEYBOARD_1: key = ECS_KEYBOARD_5; break;
 			case ECS_KEYBOARD_5: key = ECS_KEYBOARD_LEFT; break;
@@ -1033,18 +1006,13 @@ float BlissInputProducer::getValue(INT32 enumeration)
 		}
 	}
 
-	if(shifted)
-	{
-		if(down)
-		{
-			if(_keyboardShiftCount == 0)
-			{
+	if(shifted) {
+		if(down) {
+			if(_keyboardShiftCount == 0) {
 				INTY_ON(_keyboard, shiftflag);
 			}
 			_keyboardShiftCount++;
-		}
-		else
-		{
+		} else {
 			_keyboardShiftCount--;
 
 			if(_keyboardShiftCount == 0)
@@ -1057,13 +1025,10 @@ float BlissInputProducer::getValue(INT32 enumeration)
 
 	uint64_t keyflag = INTY_TO_BITMAP(key);
 
-	if(down)
-	{
+	if(down) {
 		INTY_ON(_keyboard, keyflag);
 		_keyboardDownCount++;
-	}
-	else
-	{
+	} else {
 		INTY_OFF(_keyboard, keyflag);
 		_keyboardDownCount--;
 
@@ -1075,24 +1040,20 @@ float BlissInputProducer::getValue(INT32 enumeration)
 	//DLOG(@"_keyboardDownCount == %i", _keyboardDownCount);
 }
 
-- (oneway void)keyDown:(unsigned short)keyCode
-{
+- (oneway void)keyDown:(unsigned short)keyCode {
 	int key = [self intellivisionKeyForKeyCode:keyCode];
 
-	if(key > -1)
-	{
+	if(key > -1) {
 		BOOL shifted = [self isIntellivisionKeyShiftedForKeycode:keyCode];
 
 		[self setIntellivisionKey:key isDown:YES isShifted:shifted];
 	}
 }
 
-- (oneway void)keyUp:(unsigned short)keyCode
-{
+- (oneway void)keyUp:(unsigned short)keyCode {
 	int key = [self intellivisionKeyForKeyCode:keyCode];
 
-	if(key > -1)
-	{
+	if(key > -1) {
 		BOOL shifted = [self isIntellivisionKeyShiftedForKeycode:keyCode];
 
 		[self setIntellivisionKey:key isDown:NO isShifted:shifted];

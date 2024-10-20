@@ -1,5 +1,5 @@
 {
-  "originHash" : "8de559191cb45cbcf3d9094ba09cddc806288d942e1951e8250c1e08f9a38bb4",
+  "originHash" : "4c394fec6699fcf6c64c1b5ddbb673e3b60386fdc1d0d3b0ec10f53d5bbc215a",
   "pins" : [
     {
       "identity" : "checksum",
@@ -20,30 +20,12 @@
       }
     },
     {
-      "identity" : "swift-syntax",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/swiftlang/swift-syntax.git",
-      "state" : {
-        "revision" : "64889f0c732f210a935a0ad7cda38f77f876262d",
-        "version" : "509.1.1"
-      }
-    },
-    {
       "identity" : "swiftgenplugin",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Provenance-Emu/SwiftGenPlugin.git",
       "state" : {
         "branch" : "develop",
         "revision" : "2d5a0b636fb74ade5f6b54b2c773f1ea23ade65f"
-      }
-    },
-    {
-      "identity" : "swiftmacros",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/JoeMatt/SwiftMacros.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "c7430902f056432a07803f8580263b4acd7753f1"
       }
     }
   ],

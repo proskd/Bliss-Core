@@ -45,4 +45,3 @@ __attribute__((visibility("default")))
 
 @end
 
-static __weak PVBlissGameCoreBridge *_current;

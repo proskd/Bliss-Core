@@ -129,13 +129,15 @@ public:
 	Rip				    *currentRip;
 
 	NSMutableData	    *_stateData;
-    
+
     UINT32 targetSystemID;
-    
+
     dispatch_queue_t audioQueue;
 }
 - (int)blissButtonForIntellivisionButton:(PVIntellivisionButton)button player:(NSUInteger)player;
 @end
+
+__weak PVBlissGameCoreBridge *_current;
 
 @implementation PVBlissGameCoreBridge
 
@@ -162,7 +164,7 @@ static uint8_t _keyboardShiftCount = 0;
 		_videoBus = new BlissVideoBus;
 
 		_stateData = [NSMutableData dataWithLength:sizeof(IntellivisionState)];
-        
+
         dispatch_queue_attr_t priorityAttribute = dispatch_queue_attr_make_with_qos_class( DISPATCH_QUEUE_SERIAL, QOS_CLASS_USER_INTERACTIVE, 0);
         audioQueue = dispatch_queue_create("com.provenance.jaguar.audio", priorityAttribute);
     }
@@ -198,8 +200,8 @@ static uint8_t _keyboardShiftCount = 0;
 
 - (BOOL)LoadRip:(const char*)filename error:(NSError **)outError  {
 	char cfgFilename[PATH_MAX] = {0};
-   
-    
+
+
     NSString *cfgString = self.knownCartsPath;
     if (!cfgString) {
         NSBundle *bundle = [NSBundle bundleForClass:[self class]];
@@ -210,7 +212,7 @@ static uint8_t _keyboardShiftCount = 0;
                                                       ofType:@"cfg"];
         }
     }
-    
+
     if (cfgString == nil || cfgString.length < 5) {
         ELOG(@"Required file `knowncarts.cfg` not found");
         NSDictionary *userInfo = @{
@@ -285,7 +287,7 @@ static uint8_t _keyboardShiftCount = 0;
                                     userInfo:userInfo];
             return FALSE;
         }
-        
+
 		CHAR fileSubname[MAX_PATH];
 		const CHAR* filenameStart = strrchr(filename, '/')+1;
 		strncpy(fileSubname, filenameStart, strlen(filenameStart)-4);
@@ -299,7 +301,7 @@ static uint8_t _keyboardShiftCount = 0;
             ELOG(@"LoadRom(%s) failed", filename);
             return FALSE;
         }
-        
+
 		CHAR fileSubname[MAX_PATH];
 		const CHAR* filenameStart = strrchr(filename, '/')+1;
 		strncpy(fileSubname, filenameStart, strlen(filenameStart)-4);
@@ -313,7 +315,7 @@ static uint8_t _keyboardShiftCount = 0;
             ELOG(@"LoadZip(%s) failed", filename);
             return FALSE;
         }
-        
+
 		CHAR fileSubname[MAX_PATH];
 		const CHAR* filenameStart = strrchr(filename, '/')+1;
 		strncpy(fileSubname, filenameStart, strlen(filenameStart)-4);
@@ -347,7 +349,7 @@ static uint8_t _keyboardShiftCount = 0;
 		BIOSPath = [[self BIOSPath] stringByAppendingString:[NSString stringWithFormat:@"/%s", r->getDefaultFileName()]];
 
         ILOG(@"Attempting to load BIOS at `%@`", BIOSPath);
-        
+
 		if(r->load([BIOSPath fileSystemRepresentation], r->getDefaultFileOffset())){
 			didLoadROMs = YES;
 		} else {
@@ -446,7 +448,7 @@ static uint8_t _keyboardShiftCount = 0;
 
     NSError *loadRipError;
     BOOL loaded = [self LoadRip:path.fileSystemRepresentation error: &loadRipError];
-    
+
 	if(!loaded) {
         if (loadRipError) {
             *error = loadRipError;
@@ -487,7 +489,7 @@ static uint8_t _keyboardShiftCount = 0;
                                 userInfo:userInfo];
         return NO;
     }
-    
+
 	// load emulator ROMs
 	if(![self loadROMForPeripheral:currentEmu]) {
         NSDictionary *userInfo = @{
@@ -592,11 +594,11 @@ static uint8_t _keyboardShiftCount = 0;
     return [self getVideoBufferWithHint:nil];
 }
 
-- (GLenum)pixelFormat { return GL_RGB; }
+- (GLenum)pixelFormat { return GL_BGRA; }
 
-- (GLenum)internalPixelForma { return GL_RGB; }
+- (GLenum)internalPixelFormat { return GL_BGRA; }
 
-- (GLenum)pixelType { return GL_UNSIGNED_SHORT; }
+- (GLenum)pixelType { return GL_UNSIGNED_BYTE; }
 
 - (NSTimeInterval)frameInterval {
 	// http://spatula-city.org/~im14u2c/intv/tech/master.html
@@ -617,7 +619,7 @@ static uint8_t _keyboardShiftCount = 0;
 - (void)saveStateToFileAtPath:(NSString *)fileName completionHandler:(void (^)(NSError *))block {
 	BOOL didSaveStateFile = NO;
 	didSaveStateFile = currentEmu->SaveStateFile([fileName fileSystemRepresentation]);
-    
+
     if (!didSaveStateFile) {
         NSDictionary *userInfo = @{
                                    NSLocalizedDescriptionKey: @"Failed to save state.",
@@ -718,16 +720,18 @@ static uint8_t _keyboardShiftCount = 0;
 #pragma mark Bliss Audio Mixer
 
 void BlissAudioMixer::init(UINT32 sampleRate) {
+    @autoreleasepool {
     GET_CURRENT_OR_RETURN();
-    
+
 	int sampleInterval = (sampleRate / [current frameInterval]);
 
 	// initialize the sampleBuffer
 	AudioMixer::init(sampleRate);
-    
+
     int bufferLength = (sizeof(INT16) * sampleInterval * 8) * 2;
     current->_audioBuffer = [RingBufferFactory makeWithType:RingBufferTypeProvenance
                                                       withLength:bufferLength];
+		}
 }
 
 void BlissAudioMixer::release() {
@@ -744,7 +748,7 @@ void BlissAudioMixer::flushAudio() {
         [current->_bufferLock lock];
         [current->_audioBuffer write:this->sampleBuffer size:bytesToWrite];
         [current->_bufferLock unlock];
-        
+
         // updates buffer write position and sample count
         AudioMixer::flushAudio();
     });
@@ -839,6 +843,7 @@ float BlissInputProducer::getValue(INT32 enumeration) {
 }
 
 - (oneway void)setIntellivisionButton:(int)btn isDown:(BOOL)down forPlayer:(NSUInteger)player {
+    if (player = 0) { player = 1; }
 	switch(btn)
 	{
 		case CONTROLLER_DISC_DOWN:
@@ -887,7 +892,7 @@ float BlissInputProducer::getValue(INT32 enumeration) {
 
 - (void)didPushIntellivisionButton:(PVIntellivisionButton)button forPlayer:(NSInteger)player; {
     int btn = [self blissButtonForIntellivisionButton:button player:player];
-    
+
 	if(btn > -1) {
 		[self setIntellivisionButton:btn isDown:YES forPlayer:player];
 	}
@@ -895,7 +900,7 @@ float BlissInputProducer::getValue(INT32 enumeration) {
 
 - (void)didReleaseIntellivisionButton:(PVIntellivisionButton)button forPlayer:(NSInteger)player; {
     int btn = [self blissButtonForIntellivisionButton:button player:player];
-    
+
 	if(btn > -1) {
 		[self setIntellivisionButton:btn isDown:NO forPlayer:player];
 	}

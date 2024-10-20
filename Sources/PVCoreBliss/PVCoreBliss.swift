@@ -15,17 +15,20 @@ import PVLogging
 import PVAudio
 import PVEmulatorCore
 import PVCoreBlissBridge
-import libbliss
+//import libbliss
 
 @objc
 @objcMembers
-open class PVCoreBliss: PVEmulatorCore, @unchecked Sendable {
+public final class PVCoreBliss: PVEmulatorCore, @unchecked Sendable {
 
     // MARK: Resources
     var knownCarts: String? {
         return Bundle.module.path(forResource: "knowncarts", ofType: "cfg")
     }
     
+//    public override var alwaysUseGL: Bool {
+//        return true
+//    }
     // MARK: ROMs
         
     // MARK: Cheats
